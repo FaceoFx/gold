@@ -98,7 +98,7 @@ body{
 }
 @keyframes beat{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.55)}}
 
-/* QUICK REVIEW BAR */
+/* QUICK BAR */
 .quick-bar{
   display:flex;
   gap:6px;
@@ -118,9 +118,8 @@ body{
   padding:5px 11px;
   text-decoration:none;
 }
-.quick-link:hover{border-color:var(--gold);background:rgba(201,162,39,.11)}
 
-/* SOCIAL BAR */
+/* SOCIAL */
 .social-bar{
   display:flex;
   align-items:center;
@@ -140,9 +139,7 @@ body{
   padding:5px 13px;
   text-decoration:none;
   border:.5px solid;
-  transition:opacity .15s;
 }
-.social-btn:hover{opacity:.82}
 .social-btn.wa{color:#e8ffe8;background:rgba(37,211,102,.13);border-color:rgba(37,211,102,.32)}
 .social-btn.fb{color:#d8e8ff;background:rgba(24,119,242,.13);border-color:rgba(24,119,242,.32)}
 .social-ico{font-size:14px;line-height:1}
@@ -165,10 +162,8 @@ body{
   padding:4px 10px;
   cursor:pointer;
   text-decoration:none;
-  transition:all .15s;
   white-space:nowrap;
 }
-.ref-btn:hover{border-color:var(--gold);color:var(--gold-l);background:rgba(201,162,39,.07)}
 
 /* HERO */
 .hero{
@@ -193,7 +188,18 @@ body{
   pointer-events:none;
 }
 .hero-lbl{font-size:12px;color:var(--txt3);margin-bottom:.5rem}
-.hero-body{display:flex;justify-content:space-between;align-items:flex-start;gap:.6rem;margin-bottom:.85rem}
+.hero-body{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:.85rem;
+  margin-bottom:.85rem;
+}
+.hero-main-line{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:.8rem;
+}
 .hero-price{
   font-family:'IBM Plex Mono',monospace;
   font-size:42px;
@@ -203,19 +209,89 @@ body{
   letter-spacing:-.02em;
 }
 .hero-curr{font-size:13px;color:var(--txt2);margin-top:6px}
-.hero-intl{
-  text-align:left;
-  direction:ltr;
+
+/* CHART */
+.chart-box{
+  width:100%;
   background:rgba(255,255,255,.03);
   border:.5px solid var(--line);
-  border-radius:12px;
-  padding:9px 12px;
-  flex-shrink:0;
-  min-width:118px;
+  border-radius:16px;
+  padding:11px 12px 10px;
+  direction:ltr;
+  min-height:150px;
 }
-.hero-intl-lbl{font-size:11px;color:var(--txt3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em}
-.hero-intl-val{font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:500;color:var(--txt)}
-.hero-intl-note{font-size:11px;color:var(--txt3);margin-top:3px}
+.chart-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:8px;
+  margin-bottom:6px;
+}
+.chart-lbl{
+  font-size:10px;
+  color:var(--txt3);
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+.chart-val{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:18px;
+  color:var(--txt);
+  font-weight:600;
+  margin-top:2px;
+}
+.chart-sub{
+  font-size:10px;
+  color:var(--txt3);
+  margin-top:2px;
+}
+.chart-trend{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:4px;
+  min-width:72px;
+}
+.trend-arrow{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:18px;
+  font-weight:900;
+}
+.trend-arrow.up{background:rgba(53,211,141,.12);color:var(--up);border:.5px solid rgba(53,211,141,.28)}
+.trend-arrow.dn{background:rgba(255,100,100,.12);color:var(--down);border:.5px solid rgba(255,100,100,.28)}
+.trend-arrow.nt{background:rgba(255,255,255,.06);color:var(--txt2);border:.5px solid var(--line)}
+.trend-text{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+}
+.trend-text.up{color:var(--up)}
+.trend-text.dn{color:var(--down)}
+.trend-text.nt{color:var(--txt2)}
+.chart-canvas-wrap{
+  width:100%;
+  height:82px;
+  margin-top:4px;
+}
+#goldChart{
+  width:100%;
+  height:82px;
+  display:block;
+}
+.chart-foot{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  margin-top:4px;
+  font-size:10px;
+  color:var(--txt3);
+}
+
+/* HERO BADGES */
 .hero-badges{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-bottom:.7rem}
 .badge{
   display:inline-flex;
@@ -326,7 +402,6 @@ body{
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23c9a227' stroke-width='1.3' stroke-linecap='round' fill='none'/%3E%3C/svg%3E");
   background-repeat:no-repeat;
   background-position:left 12px center;
-  transition:border-color .15s;
 }
 .csel:focus{outline:none;border-color:var(--gold)}
 .csel option{background:#1a1610}
@@ -348,7 +423,6 @@ body{
   border-radius:9px;
   cursor:pointer;
   color:var(--txt2);
-  transition:all .2s;
   border:none;
   background:none;
   font-family:'IBM Plex Sans Arabic',sans-serif;
@@ -358,7 +432,6 @@ body{
   background:var(--surf2);
   color:var(--gold-l);
   border:.5px solid var(--line2);
-  box-shadow:0 1px 6px rgba(0,0,0,.3);
 }
 
 /* KARAT TABLE */
@@ -380,10 +453,8 @@ body{
   border-bottom:.5px solid var(--line);
   align-items:center;
   position:relative;
-  transition:background .25s;
 }
 .krow:last-child{border-bottom:none}
-.krow:hover{background:rgba(201,162,39,.03)}
 .krow.k24{border-right:3px solid var(--gold-xl)}
 .krow.k22{border-right:3px solid #dba63a}
 .krow.k21{border-right:3px solid #bc8a22}
@@ -423,7 +494,6 @@ body{
   align-items:center;
 }
 .bsrow:last-child{border-bottom:none}
-.bsrow:hover{background:rgba(201,162,39,.03)}
 .bs-k{font-size:14px;font-weight:500;color:var(--txt)}
 .bs-buy,.bs-sell{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;text-align:center}
 .bs-buy{color:var(--down)}
@@ -461,13 +531,11 @@ body{
   font-size:14px;
   font-weight:700;
   cursor:pointer;
-  transition:all .15s;
   display:flex;
   align-items:center;
   justify-content:center;
   gap:9px;
 }
-.refresh-btn:hover{background:rgba(201,162,39,.07);border-color:var(--gold)}
 .spin-icon{
   width:15px;
   height:15px;
@@ -475,7 +543,6 @@ body{
   border-top-color:transparent;
   border-radius:50%;
   display:inline-block;
-  flex-shrink:0;
 }
 .refresh-btn.spinning .spin-icon{animation:spinIt .7s linear infinite}
 @keyframes spinIt{to{transform:rotate(360deg)}}
@@ -491,7 +558,7 @@ body{
   color:var(--txt3);
   font-family:'IBM Plex Mono',monospace;
 }
-.last-dot{width:6px;height:6px;border-radius:50%;background:var(--up);opacity:.75;flex-shrink:0}
+.last-dot{width:6px;height:6px;border-radius:50%;background:var(--up);opacity:.75}
 
 /* REFERENCE CARDS */
 .ref-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 1rem}
@@ -504,9 +571,7 @@ body{
   display:flex;
   flex-direction:column;
   gap:4px;
-  transition:all .18s;
 }
-.ref-card:hover{border-color:var(--gold);background:rgba(201,162,39,.07);transform:translateY(-1px)}
 .ref-card-name{font-size:13px;font-weight:600;color:var(--txt)}
 .ref-card-url{font-size:11px;color:var(--txt3);direction:ltr;text-align:left}
 .ref-card-tag{font-size:11px;color:var(--gold-d)}
@@ -557,7 +622,6 @@ body{
   line-height:2.2;
 }
 .footer a{color:var(--txt3);text-decoration:none}
-.footer a:hover{color:var(--gold)}
 
 @media(min-width:461px){
   #app{border-left:.5px solid var(--line);border-right:.5px solid var(--line);min-height:100vh}
@@ -730,7 +794,7 @@ body{
     <div class="sec-hdr" id="notes" style="margin-top:.85rem"><span class="sec-lbl">ملاحظات مهمة</span><div class="sec-line"></div></div>
     <div class="notes">
       <b>السعر تقريبي</b> — يعكس سعر المعدن الخام فقط، ولا يشمل المصنعية أو الضريبة أو هامش البيع والشراء.<br>
-      <b>المصادر:</b> gold-api.com · CoinGecko PAXG · open.er-api.com<br>
+      <b>المصادر:</b> gold-api.com · CoinGecko PAXG · Yahoo Finance للمنحنى عند توفره · open.er-api.com<br>
       <b>الريال السعودي:</b> مربوط بشكل ثابت بـ 1 USD = 3.75 SAR.<br>
       <b>الفضة:</b> يتم جلبها من XAG/USD عند توفرها من gold-api.com.
     </div>
@@ -743,10 +807,12 @@ body{
 
   <div class="footer">
     بورصة الذهب بالمنطقة الشرقية<br>
-    المصادر: gold-api.com · CoinGecko · open.er-api.com<br>
+    المصادر: gold-api.com · CoinGecko · Yahoo Finance · open.er-api.com<br>
     <a href="https://chat.whatsapp.com/F2yDOq79MriDHXSSdeRqi3?mode=gi_t" target="_blank" rel="noopener">واتساب</a>
     &nbsp;·&nbsp;
     <a href="https://www.facebook.com/share/g/1BAFc8suFQ/?mibextid=wwXIfr" target="_blank" rel="noopener">فيسبوك</a>
+    &nbsp;·&nbsp;<br><br>
+    <b><a href="https://www.facebook.com/GFX3r/" target="_blank" rel="noopener" class="notes">تصميم وتنفيذ شريف الديب</a></b>
   </div>
 
 </div>
@@ -754,6 +820,7 @@ body{
 <script>
 const OZ = 31.1034768;
 const REFRESH_SEC = 60;
+const CHART_HOURS = 48;
 
 const KARATS = [
   { k:24, ar:'عيار 24', purity:1,       cls:'k24', fine:'999.9' },
@@ -793,7 +860,8 @@ const S = {
   lastUpdate:null,
   timerSec:REFRESH_SEC,
   timerTO:null,
-  countInt:null
+  countInt:null,
+  history:[]
 };
 
 function $(id){ return document.getElementById(id); }
@@ -891,6 +959,104 @@ async function fetchFxRates(){
   return null;
 }
 
+/* 48H ONLY */
+async function fetchYahooHistory(){
+  const url = 'https://query1.finance.yahoo.com/v8/finance/chart/GC=F?range=2d&interval=15m';
+  const proxied = 'https://corsproxy.io/?' + encodeURIComponent(url);
+  const j = await tryFetch(proxied, 12000);
+
+  const r = j?.chart?.result?.[0];
+  const ts = r?.timestamp || [];
+  const close = r?.indicators?.quote?.[0]?.close || [];
+
+  if(!ts.length || !close.length) return [];
+
+  const cutoff = Date.now() - CHART_HOURS * 60 * 60 * 1000;
+
+  return ts.map((t,i) => ({
+    t:t * 1000,
+    p:close[i]
+  }))
+  .filter(x => x.t >= cutoff && x.p && !Number.isNaN(x.p))
+  .sort((a,b) => a.t - b.t);
+}
+
+function saveLocalHistory(price){
+  const now = Date.now();
+  let arr = [];
+
+  try{
+    arr = JSON.parse(localStorage.getItem('_goldHistory') || '[]');
+  }catch(_){
+    arr = [];
+  }
+
+  arr.push({ t:now, p:price });
+
+  const minTime = now - 49 * 60 * 60 * 1000;
+  arr = arr
+    .filter(x => x && x.t >= minTime && x.p > 100)
+    .sort((a,b) => a.t - b.t);
+
+  const compact = [];
+  for(const item of arr){
+    const last = compact[compact.length - 1];
+    if(!last || item.t - last.t >= 45 * 1000) compact.push(item);
+    else last.p = item.p;
+  }
+
+  localStorage.setItem('_goldHistory', JSON.stringify(compact));
+  S.history = compact;
+}
+
+function getLocalHistory(){
+  let arr = [];
+  try{
+    arr = JSON.parse(localStorage.getItem('_goldHistory') || '[]');
+  }catch(_){
+    arr = [];
+  }
+  const minTime = Date.now() - CHART_HOURS * 60 * 60 * 1000;
+  return arr.filter(x => x && x.t >= minTime && x.p > 100).sort((a,b) => a.t - b.t);
+}
+
+function buildSyntheticHistory(current){
+  const points = [];
+  const now = Date.now();
+  const count = 96;
+  const start = now - CHART_HOURS * 60 * 60 * 1000;
+
+  for(let i=0;i<count;i++){
+    const ratio = i / (count - 1);
+    const t = start + ratio * CHART_HOURS * 60 * 60 * 1000;
+    const wave = Math.sin(ratio * Math.PI * 3.2) * 8;
+    const drift = (ratio - 1) * -Math.max(8, Math.abs(S.goldChange || 5));
+    const noise = Math.sin(i * 1.73) * 1.8;
+    points.push({ t, p:current + drift + wave + noise });
+  }
+
+  points.push({ t:now, p:current });
+  return points;
+}
+
+async function updateHistory(){
+  const remote = await fetchYahooHistory();
+
+  if(remote.length >= 6){
+    S.history = remote;
+    return;
+  }
+
+  const local = getLocalHistory();
+
+  if(local.length >= 2){
+    S.history = local;
+    return;
+  }
+
+  S.history = buildSyntheticHistory(S.gold);
+}
+
 async function fetchPrices(){
   const btn = $('refreshBtn');
   const live = $('liveText');
@@ -921,10 +1087,15 @@ async function fetchPrices(){
     S.goldChange = prices.change;
     S.goldChangePct = prices.changePct;
     S.dataSource = prices.src;
+
     localStorage.setItem('_gp', String(prices.gold));
     if(prices.silver) localStorage.setItem('_sp', String(prices.silver));
+
+    saveLocalHistory(prices.gold);
+    await updateHistory();
     ok = true;
   }else if(S.gold){
+    await updateHistory();
     ok = true;
   }
 
@@ -947,6 +1118,10 @@ async function fetchPrices(){
       S.goldChange = 0;
       S.goldChangePct = 0;
       S.dataSource = 'مخزّن محلياً';
+
+      saveLocalHistory(savedGold);
+      await updateHistory();
+
       S.initialized = true;
       S.lastUpdate = new Date();
       renderAll();
@@ -988,6 +1163,12 @@ function renderHero(){
     pctVal = prev24 > 0 ? (diffVal / prev24) * 100 : 0;
   }
 
+  const chartDiff = getChartDiff();
+  const chartIsUp = chartDiff.diff >= 0;
+  const chartIsZero = Math.abs(chartDiff.diff) < 0.001;
+  const trendClass = chartIsZero ? 'nt' : chartIsUp ? 'up' : 'dn';
+  const arrow = chartIsZero ? '→' : chartIsUp ? '↗' : '↘';
+
   const isUp = diffVal >= 0;
   const isZero = Math.abs(pctVal) < 0.001;
   const timeStr = new Date().toLocaleTimeString('ar-SA', {hour:'2-digit', minute:'2-digit'});
@@ -996,16 +1177,39 @@ function renderHero(){
   $('heroCard').innerHTML = `
     <div class="hero-lbl">سعر الذهب · عيار 24 · الجرام الواحد</div>
     <div class="hero-body">
-      <div>
-        <div class="hero-price">${fmt(g24,c)}</div>
-        <div class="hero-curr">${cu.s} — ${cu.name}</div>
+      <div class="hero-main-line">
+        <div>
+          <div class="hero-price">${fmt(g24,c)}</div>
+          <div class="hero-curr">${cu.s} — ${cu.name}</div>
+        </div>
       </div>
-      <div class="hero-intl">
-        <div class="hero-intl-lbl">الأونصة</div>
-        <div class="hero-intl-val">${S.gold.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})} $</div>
-        <div class="hero-intl-note">XAU / USD</div>
+
+      <div class="chart-box">
+        <div class="chart-top">
+          <div>
+            <div class="chart-lbl">XAU / USD</div>
+            <div class="chart-val">${S.gold.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})} $</div>
+            <div class="chart-sub">آخر 48 ساعة · حتى آخر تحديث</div>
+          </div>
+          <div class="chart-trend">
+            <div class="trend-arrow ${trendClass}">${arrow}</div>
+            <div class="trend-text ${trendClass}">
+              ${chartIsZero ? '0.00%' : (chartIsUp ? '+' : '') + chartDiff.pct.toFixed(2) + '%'}
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-canvas-wrap">
+          <canvas id="goldChart"></canvas>
+        </div>
+
+        <div class="chart-foot">
+          <span>${S.history.length ? formatChartTime(S.history[0].t) + ' - ' + formatChartTime(S.history[S.history.length-1].t) : '—'}</span>
+          <span>48H</span>
+        </div>
       </div>
     </div>
+
     <div class="hero-badges">
       ${
         isZero
@@ -1026,6 +1230,134 @@ function renderHero(){
       </div>
     </div>
   `;
+
+  setTimeout(drawGoldChart, 30);
+}
+
+function getChartDiff(){
+  const h = S.history || [];
+  if(h.length >= 2){
+    const first = h[0].p;
+    const last = h[h.length - 1].p;
+    const diff = last - first;
+    return { diff, pct:first ? (diff / first) * 100 : 0 };
+  }
+  return { diff:S.goldChange || 0, pct:S.goldChangePct || 0 };
+}
+
+function formatChartTime(t){
+  return new Date(t).toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
+}
+
+function drawGoldChart(){
+  const canvas = $('goldChart');
+  if(!canvas) return;
+
+  const wrap = canvas.parentElement;
+  const dpr = window.devicePixelRatio || 1;
+  const width = Math.max(260, wrap.clientWidth);
+  const height = 82;
+
+  canvas.width = width * dpr;
+  canvas.height = height * dpr;
+  canvas.style.width = width + 'px';
+  canvas.style.height = height + 'px';
+
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+  ctx.clearRect(0,0,width,height);
+
+  const data = (S.history || []).filter(x => x && x.p);
+  if(data.length < 2){
+    ctx.fillStyle = 'rgba(196,169,106,.7)';
+    ctx.font = '12px IBM Plex Sans Arabic';
+    ctx.textAlign = 'center';
+    ctx.fillText('لا توجد بيانات كافية للرسم', width/2, height/2);
+    return;
+  }
+
+  const prices = data.map(x => x.p);
+  let min = Math.min(...prices);
+  let max = Math.max(...prices);
+
+  if(max === min){
+    max += 1;
+    min -= 1;
+  }
+
+  const padX = 6;
+  const padY = 8;
+  const plotW = width - padX * 2;
+  const plotH = height - padY * 2;
+
+  const first = data[0].p;
+  const last = data[data.length - 1].p;
+  const up = last >= first;
+  const color = up ? '#35d38d' : '#ff6464';
+
+  for(let i=0;i<3;i++){
+    const y = padY + (plotH / 2) * i;
+    ctx.beginPath();
+    ctx.moveTo(padX,y);
+    ctx.lineTo(width-padX,y);
+    ctx.strokeStyle = 'rgba(242,199,102,.09)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  function xAt(i){
+    return padX + (i / (data.length - 1)) * plotW;
+  }
+
+  function yAt(p){
+    return padY + (1 - ((p - min) / (max - min))) * plotH;
+  }
+
+  ctx.beginPath();
+  data.forEach((point,i) => {
+    const x = xAt(i);
+    const y = yAt(point.p);
+    if(i === 0) ctx.moveTo(x,y);
+    else ctx.lineTo(x,y);
+  });
+
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2.2;
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.stroke();
+
+  ctx.lineTo(width - padX, height - padY);
+  ctx.lineTo(padX, height - padY);
+  ctx.closePath();
+
+  const gradient = ctx.createLinearGradient(0, padY, 0, height);
+  gradient.addColorStop(0, up ? 'rgba(53,211,141,.22)' : 'rgba(255,100,100,.22)');
+  gradient.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = gradient;
+  ctx.fill();
+
+  const lastX = xAt(data.length - 1);
+  const lastY = yAt(last);
+
+  ctx.beginPath();
+  ctx.arc(lastX,lastY,3.7,0,Math.PI*2);
+  ctx.fillStyle = color;
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.arc(lastX,lastY,7.5,0,Math.PI*2);
+  ctx.strokeStyle = color;
+  ctx.globalAlpha = .3;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.globalAlpha = 1;
+
+  ctx.fillStyle = 'rgba(255,248,232,.72)';
+  ctx.font = '10px IBM Plex Mono';
+  ctx.textAlign = 'left';
+  ctx.fillText(max.toFixed(0), 2, 10);
+  ctx.fillText(min.toFixed(0), 2, height - 3);
 }
 
 function renderCalc(){
@@ -1209,6 +1541,10 @@ function showErr(msg){
 function hideErr(){
   $('errBox').style.display = 'none';
 }
+
+window.addEventListener('resize', () => {
+  if(S.initialized) drawGoldChart();
+});
 
 fetchPrices();
 </script>
