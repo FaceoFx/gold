@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* تم الحفاظ على التصميم الأصلي الاحترافي الخاص بك مع التأكد من توافق الألوان */
+/* تم استعادة كامل التصميم الاحترافي الخاص بك */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
   --bg:#070604;--card:#131009;--surf:#1a1610;--surf2:#211d13;
@@ -117,16 +117,6 @@ body{
 }
 .hero-intl-lbl{font-size:11px;color:var(--txt3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em}
 .hero-intl-val{font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:500;color:var(--txt)}
-.hero-badges{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-bottom:.7rem}
-.badge{
-  display:inline-flex;align-items:center;gap:4px;
-  padding:5px 12px;border-radius:12px;
-  font-size:12px;font-weight:700;
-  font-family:'IBM Plex Mono',monospace;
-}
-.badge.up{background:rgba(53,211,141,.13);color:var(--up);border:.5px solid rgba(53,211,141,.25)}
-.badge.dn{background:rgba(255,100,100,.13);color:var(--down);border:.5px solid rgba(255,100,100,.25)}
-.badge.nt{background:rgba(255,255,255,.05);color:var(--txt2);border:.5px solid var(--line)}
 
 .timer-ring-wrap{
   display:flex;align-items:center;gap:12px;
@@ -151,6 +141,7 @@ body{
 }
 .ring-title{font-size:13px;color:var(--gold-l);font-weight:600}
 
+/* ── طريقة الحساب ────────────────────── */
 .calc-card{
   margin:0 1rem .75rem;
   background:var(--card);
@@ -206,7 +197,6 @@ body{
   background:var(--surf);padding:8px 13px;
   border-bottom:.5px solid var(--line);
 }
-.kthead span{font-size:11px;color:var(--txt3)}
 .krow{
   display:grid;grid-template-columns:1.15fr 1fr .85fr;
   padding:12px 13px;border-bottom:.5px solid var(--line);
@@ -238,6 +228,19 @@ body{
 }
 .refresh-btn.spinning .spin-icon{animation:spinIt .7s linear infinite}
 @keyframes spinIt{to{transform:rotate(360deg)}}
+
+.ref-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 1rem}
+.ref-card{
+  background:var(--surf);border:.5px solid var(--line);border-radius:12px;
+  padding:11px 12px;text-decoration:none;
+  display:flex;flex-direction:column;gap:4px;
+}
+
+.notes{
+  margin:0 1rem;
+  background:var(--surf);border:.5px solid var(--line);border-radius:13px;
+  padding:14px 15px;font-size:12px;color:var(--txt2);line-height:1.9;
+}
 
 .err-box{
   background:rgba(255,100,100,.07);border:.5px solid rgba(255,100,100,.22);
@@ -272,10 +275,23 @@ body{
       <a class="social-btn wa" href="https://chat.whatsapp.com/F2yDOq79MriDHXSSdeRqi3?mode=gi_t" target="_blank">واتساب</a>
       <a class="social-btn fb" href="https://www.facebook.com/share/g/1BAFc8suFQ/?mibextid=wwXIfr" target="_blank">فيسبوك</a>
     </div>
+    <div class="ref-bar">
+      <a class="ref-btn" href="https://alarbash.sa/live-gold-price" target="_blank">الأربش ↗</a>
+      <a class="ref-btn" href="https://dewanaldahab.com/ar/LivePricing" target="_blank">ديوان الذهب ↗</a>
+    </div>
   </header>
 
   <div class="hero" id="heroCard">
     <div class="loading-state"><div class="loading-ring"></div>جارٍ تحميل الأسعار...</div>
+  </div>
+
+  <!-- طريقة الحساب -->
+  <div class="calc-card" id="calcCard" style="display:none">
+    <div class="calc-title">طريقة الحساب</div>
+    <div class="calc-row">
+      <div class="calc-row-lbl">الأونصة العالمية</div>
+      <div class="calc-row-val" id="calcOz">—</div>
+    </div>
   </div>
 
   <div id="mainContent" style="display:none">
@@ -292,6 +308,7 @@ body{
     <div class="tabs">
       <button class="tab on" id="tab-gram" onclick="switchTab('gram')">جرام / عيار</button>
       <button class="tab" id="tab-buysell" onclick="switchTab('buysell')">بيع وشراء</button>
+      <button class="tab" id="tab-silver" onclick="switchTab('silver')">الفضة</button>
     </div>
 
     <div id="view-gram">
@@ -302,9 +319,29 @@ body{
       <div class="bstable"><div id="bsRows"></div></div>
     </div>
 
+    <div id="view-silver" style="display:none">
+      <div class="silver-card" id="silverCard"></div>
+    </div>
+
     <button class="refresh-btn" id="refreshBtn" onclick="manualRefresh()">
       <span class="spin-icon"></span> تحديث الآن
     </button>
+
+    <div class="sec-hdr"><span class="sec-lbl">مراجع الأسعار</span><div class="sec-line"></div></div>
+    <div class="ref-grid">
+      <a class="ref-card" href="https://alarbash.sa/live-gold-price" target="_blank">
+        <span style="color:var(--txt)">مؤسسة الأربش</span>
+        <span style="font-size:10px;color:var(--txt3)">alarbash.sa</span>
+      </a>
+      <a class="ref-card" href="https://dewanaldahab.com/ar/LivePricing" target="_blank">
+        <span style="color:var(--txt)">ديوان الذهب</span>
+        <span style="font-size:10px;color:var(--txt3)">dewanaldahab.com</span>
+      </a>
+    </div>
+
+    <div class="notes" style="margin-top:1rem">
+      <b>ملاحظة:</b> السعر يعكس الخام ولا يشمل المصنعية أو الضريبة.
+    </div>
   </div>
 
   <div class="err-wrap"><div class="err-box" id="errBox"></div></div>
@@ -312,7 +349,6 @@ body{
 </div>
 
 <script>
-/* ═══ التعديلات التقنية لضمان العمل على GitHub Pages ═══ */
 const OZ = 31.1035;
 const REFRESH_SEC = 60;
 const KARATS = [
@@ -323,57 +359,39 @@ const KARATS = [
 ];
 
 const CURRENCIES = {
-  SAR:{ r:3.75, s:'ر.س', d:2, name:'ريال سعودي' },
-  AED:{ r:3.67, s:'د.إ', d:2, name:'درهم إماراتي' },
-  KWD:{ r:0.31, s:'د.ك', d:3, name:'دينار كويتي' },
-  EGP:{ r:50.5, s:'ج.م', d:2, name:'جنيه مصري' },
-  USD:{ r:1, s:'$', d:2, name:'دولار أمريكي' }
+  SAR:{ r:3.75, s:'ر.س', d:2 },
+  AED:{ r:3.67, s:'د.إ', d:2 },
+  KWD:{ r:0.31, s:'د.ك', d:3 },
+  EGP:{ r:50.5, s:'ج.م', d:2 },
+  USD:{ r:1, s:'$', d:2 }
 };
 
-const S = { gold:null, silver:null, cur:'SAR', dataSource:'' };
+const S = { gold:null, silver:null, cur:'SAR' };
 
 function $(id){ return document.getElementById(id); }
 function gramPrice(oz, cur, purity){ return (oz / OZ) * CURRENCIES[cur].r * purity; }
 
 async function fetchPrices(){
   $('refreshBtn').classList.add('spinning');
-  
-  // استخدام نظام طبقات لضمان جلب البيانات حتى لو فشل مصدر
-  let prices = null;
-  
   try {
-    // المحاولة من gold-api (الأكثر استقراراً للمتصفح مباشرة)
-    const ga = await fetch('https://api.gold-api.com/price/XAU').then(r => r.json());
+    const [ga, sa] = await Promise.all([
+      fetch('https://api.gold-api.com/price/XAU').then(r => r.json()),
+      fetch('https://api.gold-api.com/price/XAG').then(r => r.json())
+    ]);
     if(ga && ga.price) {
-      prices = { gold: ga.price, src: 'gold-api.com' };
+      S.gold = ga.price;
+      S.silver = sa.price || null;
+      renderAll();
     }
   } catch(e) {
-    try {
-      // المحاولة من CoinGecko كبديل (PAX Gold)
-      const cg = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=pax-gold&vs_currencies=usd').then(r => r.json());
-      if(cg && cg['pax-gold']) {
-        prices = { gold: cg['pax-gold'].usd, src: 'CoinGecko' };
-      }
-    } catch(e2) {
-      console.error("All sources failed");
-    }
+    console.error("API Failed");
   }
-
   $('refreshBtn').classList.remove('spinning');
-
-  if(prices){
-    S.gold = prices.gold;
-    S.dataSource = prices.src;
-    renderAll();
-    $('errBox').style.display = 'none';
-  } else {
-    $('errBox').textContent = '⚠️ تعذر تحديث الأسعار، يرجى المحاولة لاحقاً.';
-    $('errBox').style.display = 'block';
-  }
 }
 
 function renderAll(){
   $('mainContent').style.display = 'block';
+  $('calcCard').style.display = 'block';
   const c = S.cur;
   const g24 = gramPrice(S.gold, c, 1);
   
@@ -391,33 +409,47 @@ function renderAll(){
     </div>
   `;
 
+  $('calcOz').textContent = `${S.gold.toFixed(2)} USD/Oz`;
+
   let kHtml = '';
   KARATS.forEach(karat => {
-    const p = gramPrice(S.gold, c, karat.purity);
-    kHtml += `
-      <div class="krow ${karat.cls}">
-        <div class="k-name">${karat.ar}</div>
-        <div class="k-price">${p.toFixed(2)} ${CURRENCIES[c].s}</div>
-      </div>`;
+    kHtml += `<div class="krow ${karat.cls}">
+      <div class="k-name">${karat.ar}</div>
+      <div class="k-price">${gramPrice(S.gold, c, karat.purity).toFixed(2)} ${CURRENCIES[c].s}</div>
+    </div>`;
   });
   $('karatRows').innerHTML = kHtml;
+
+  let bsHtml = '';
+  KARATS.forEach(karat => {
+    const mid = gramPrice(S.gold, c, karat.purity);
+    bsHtml += `<div class="bsrow">
+      <div style="font-size:13px">${karat.ar}</div>
+      <div style="color:var(--up);text-align:center">${(mid*1.015).toFixed(2)}</div>
+      <div style="color:var(--down);text-align:center">${(mid*0.98).toFixed(2)}</div>
+    </div>`;
+  });
+  $('bsRows').innerHTML = bsHtml;
+
+  if(S.silver) {
+    const sPrice = gramPrice(S.silver, c, 1);
+    $('silverCard').innerHTML = `
+      <div style="color:var(--txt)">فضة عيار 999</div>
+      <div style="font-family:'IBM Plex Mono';color:var(--silver);font-size:20px">${sPrice.toFixed(2)} ${CURRENCIES[c].s}</div>
+    `;
+  }
 }
 
 function switchTab(t){
-  $('view-gram').style.display = t==='gram' ? 'block' : 'none';
-  $('view-buysell').style.display = t==='buysell' ? 'block' : 'none';
-  $('tab-gram').classList.toggle('on', t==='gram');
-  $('tab-buysell').classList.toggle('on', t==='buysell');
+  ['gram','buysell','silver'].forEach(x => {
+    $('view-'+x).style.display = x===t ? 'block' : 'none';
+    $('tab-'+x).classList.toggle('on', x===t);
+  });
 }
 
-function changeCurrency(){
-  S.cur = $('csel').value;
-  renderAll();
-}
-
+function changeCurrency(){ S.cur = $('csel').value; renderAll(); }
 function manualRefresh(){ fetchPrices(); }
 
-// بدء التشغيل
 fetchPrices();
 setInterval(fetchPrices, REFRESH_SEC * 1000);
 </script>
