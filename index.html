@@ -928,7 +928,23 @@ async function fetchGoldPrice(){
 
   if(goldPrice){
     const stored = parseFloat(localStorage.getItem('_gp') || '0');
-    const prev = S.gold || (stored > 100 ? stored : goldPrice);
+
+    const nowUTC = Date.now();
+    const closeHourUTC = 21;
+    const todayCloseUTC = new Date(new Date().toISOString().slice(0,10)+'T21:00:00Z').getTime();
+    const prevCloseUTC = todayCloseUTC - 24*60*60*1000;
+    const refCloseUTC = nowUTC < todayCloseUTC ? prevCloseUTC : todayCloseUTC;
+
+    let closeRef = parseFloat(localStorage.getItem('_gpClose') || '0');
+    const closeTs  = parseInt(localStorage.getItem('_gpCloseTs') || '0');
+
+    if(!closeRef || Math.abs(closeTs - refCloseUTC) > 30*60*1000){
+      closeRef = stored > 100 ? stored : goldPrice;
+      localStorage.setItem('_gpClose', String(closeRef));
+      localStorage.setItem('_gpCloseTs', String(refCloseUTC));
+    }
+
+    const prev = closeRef > 100 ? closeRef : goldPrice;
     const change = goldPrice - prev;
 
     return {
@@ -1320,11 +1336,6 @@ function getChartDiff(){
     return { diff, pct:closePrice ? (diff / closePrice) * 100 : 0 };
   }
 
-  if(h.length >= 2){
-    const first = h[0].p;
-    const diff = last - first;
-    return { diff, pct:first ? (diff / first) * 100 : 0 };
-  }
   return { diff:S.goldChange || 0, pct:S.goldChangePct || 0 };
 }
 
@@ -1373,9 +1384,9 @@ function drawGoldChart(){
   const plotW = width - padX * 2;
   const plotH = height - padY * 2;
 
-  const first = data[0].p;
   const last = data[data.length - 1].p;
-  const up = last >= first;
+  const chartDiffColor = getChartDiff();
+  const up = chartDiffColor.diff >= 0;
   const color = up ? '#35d38d' : '#ff6464';
 
   for(let i=0;i<3;i++){
