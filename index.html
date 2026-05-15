@@ -128,7 +128,7 @@ body{
   padding:.4rem 1rem .5rem;
   border-top:.5px solid rgba(255,255,255,.04);
 }
-.social-lbl{font-size:11px;color:var(--txt3);flex-shrink:0}
+.social-lbl{font-size:15px;color:var(--txt3);flex-shrink:0}
 .social-btn{
   display:inline-flex;
   align-items:center;
@@ -306,7 +306,7 @@ body{
 .badge.up{background:rgba(53,211,141,.13);color:var(--up);border:.5px solid rgba(53,211,141,.25)}
 .badge.dn{background:rgba(255,100,100,.13);color:var(--down);border:.5px solid rgba(255,100,100,.25)}
 .badge.nt{background:rgba(255,255,255,.05);color:var(--txt2);border:.5px solid var(--line)}
-.hero-date{font-size:11px;color:var(--txt3);font-family:'IBM Plex Mono',monospace}
+.hero-date{font-size:13px;color:var(--txt3);font-family:'IBM Plex Mono',monospace}
 
 /* TIMER */
 .timer-ring-wrap{
@@ -459,7 +459,6 @@ body{
 .krow.k22{border-right:3px solid #dba63a}
 .krow.k21{border-right:3px solid #bc8a22}
 .krow.k18{border-right:3px solid #8d6116}
-.krow.k14{border-right:3px solid #5c3d0c}
 .k-name{font-size:14px;font-weight:600;color:var(--txt)}
 .k-fine{font-size:11px;color:var(--txt3);margin-top:2px}
 .k-price{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;text-align:center}
@@ -478,7 +477,7 @@ body{
 .bstable{margin:0 1rem;border:.5px solid var(--line);border-radius:14px;overflow:hidden}
 .bshead{
   display:grid;
-  grid-template-columns:1.1fr 1fr 1fr;
+  grid-template-columns:1.1fr 1fr;
   background:var(--surf);
   padding:8px 13px;
   border-bottom:.5px solid var(--line);
@@ -488,7 +487,7 @@ body{
 .bshead .bl{text-align:left;direction:ltr}
 .bsrow{
   display:grid;
-  grid-template-columns:1.1fr 1fr 1fr;
+  grid-template-columns:1.1fr 1fr;
   padding:12px 13px;
   border-bottom:.5px solid var(--line);
   align-items:center;
@@ -554,7 +553,7 @@ body{
   justify-content:center;
   gap:7px;
   margin:.5rem 1rem 0;
-  font-size:11px;
+  font-size:13px;
   color:var(--txt3);
   font-family:'IBM Plex Mono',monospace;
 }
@@ -622,6 +621,35 @@ body{
   line-height:2.2;
 }
 .footer a{color:var(--txt3);text-decoration:none}
+.credit-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-top:.9rem;
+  padding:9px 18px;
+  background:linear-gradient(135deg,rgba(201,162,39,.1),rgba(201,162,39,.05));
+  border:.5px solid var(--line2);
+  border-radius:999px;
+  text-decoration:none;
+  color:var(--gold-l);
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:.02em;
+  transition:background .2s,border-color .2s;
+}
+.credit-badge:hover{background:rgba(201,162,39,.18);border-color:var(--gold)}
+.credit-badge-ico{
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#7a5510,#c9a227);
+  display:grid;
+  place-items:center;
+  font-size:12px;
+  font-weight:700;
+  color:#1a1102;
+  flex-shrink:0;
+}
 
 @media(min-width:461px){
   #app{border-left:.5px solid var(--line);border-right:.5px solid var(--line);min-height:100vh}
@@ -644,13 +672,6 @@ body{
       <div class="live-pill"><span class="pulse"></span><span id="liveText">مباشر</span></div>
     </div>
 
-    <nav class="quick-bar">
-      <a class="quick-link" href="#heroCard">السعر الآن</a>
-      <a class="quick-link" href="#calcCard">طريقة الحساب</a>
-      <a class="quick-link" href="#tabsArea">العيارات</a>
-      <a class="quick-link" href="#references">المراجع</a>
-      <a class="quick-link" href="#notes">ملاحظات</a>
-    </nav>
 
     <div class="social-bar">
       <span class="social-lbl">انضم إلينا:</span>
@@ -662,28 +683,12 @@ body{
       </a>
     </div>
 
-    <div class="ref-bar">
-      <a class="ref-btn" href="https://alarbash.sa/live-gold-price" target="_blank" rel="noopener">الأربش ↗</a>
-      <a class="ref-btn" href="https://dewanaldahab.com/ar/LivePricing" target="_blank" rel="noopener">ديوان الذهب ↗</a>
-      <a class="ref-btn" href="https://saudigoldprice.com/" target="_blank" rel="noopener">أسعار السعودية ↗</a>
-    </div>
   </header>
 
   <div class="hero" id="heroCard">
     <div class="loading-state"><div class="loading-ring"></div>جارٍ تحميل الأسعار اللحظية...</div>
   </div>
 
-  <div class="calc-card" id="calcCard" style="display:none">
-    <div class="calc-title">طريقة الحساب</div>
-    <div class="calc-row">
-      <div class="calc-row-lbl">الأونصة العالمية بالدولار</div>
-      <div class="calc-row-val" id="calcOz">—</div>
-    </div>
-    <div class="calc-row">
-      <div class="calc-row-lbl">المعادلة المستخدمة لسعر الجرام</div>
-      <div class="calc-row-val eq" id="calcEq">—</div>
-    </div>
-  </div>
 
   <div id="mainContent" style="display:none">
 
@@ -709,8 +714,8 @@ body{
 
     <div class="tabs" id="tabsArea">
       <button class="tab on" id="tab-gram" onclick="switchTab('gram')">جرام / عيار</button>
-      <button class="tab" id="tab-buysell" onclick="switchTab('buysell')">بيع وشراء</button>
-      <button class="tab" id="tab-silver" onclick="switchTab('silver')">الفضة</button>
+      <button class="tab" id="tab-buysell" onclick="switchTab('buysell')">شراء من محل</button>
+      <button class="tab" id="tab-silver" onclick="switchTab('silver')">الآلة الحاسبة</button>
     </div>
 
     <div id="view-gram">
@@ -725,34 +730,48 @@ body{
     <div id="view-buysell" style="display:none">
       <div class="bstable">
         <div class="bshead">
-          <span>العيار</span><span class="bc">بيع المحل لك</span><span class="bl">شراء المحل منك</span>
+          <span>العيار</span><span class="bc">شراء من محل</span>
         </div>
         <div id="bsRows"></div>
-        <div class="bsnote">⚠ تقريبي بناءً على السعر الخام، ولا يشمل المصنعية أو الضريبة أو سياسة المتجر.</div>
+        <div class="bsnote">⚠ سعر المحل المستعمل يشمل زيادة مصنعية 10 ريال للجرام حسب المحل.</div>
       </div>
 
-      <div style="margin:.7rem 1rem 0">
-        <div class="ref-grid" style="margin:0">
-          <a class="ref-card" href="https://alarbash.sa/live-gold-price" target="_blank" rel="noopener">
-            <div class="ref-card-name">مؤسسة الأربش</div>
-            <div class="ref-card-url">alarbash.sa</div>
-            <div class="ref-card-tag">بيع وشراء مباشر ↗</div>
-          </a>
-          <a class="ref-card" href="https://dewanaldahab.com/ar/LivePricing" target="_blank" rel="noopener">
-            <div class="ref-card-name">ديوان الذهب</div>
-            <div class="ref-card-url">dewanaldahab.com</div>
-            <div class="ref-card-tag">أسعار فورية ↗</div>
-          </a>
-        </div>
-      </div>
     </div>
 
     <div id="view-silver" style="display:none">
-      <div class="silver-card" id="silverCard">
-        <div style="font-size:13px;color:var(--txt2);width:100%;text-align:center">جارٍ التحميل...</div>
-      </div>
-      <div style="margin:.6rem 1rem 0;font-size:12px;color:var(--txt3);text-align:center">
-        فضة عيار 999 — سعر الجرام الواحد من XAG/USD
+      <div class="calc-card" style="margin:0 1rem">
+        <div class="calc-title">آلة حاسبة — سعر الذهب</div>
+
+        <div class="calc-row" style="display:flex;align-items:center;gap:10px">
+          <select class="csel" id="calcKarat" onchange="calcGold()" style="flex:1">
+            <option value="24">عيار 24 — نقاوة 999.9</option>
+            <option value="22">عيار 22 — نقاوة 916</option>
+            <option value="21" selected>عيار 21 — نقاوة 875</option>
+            <option value="18">عيار 18 — نقاوة 750</option>
+          </select>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap;flex-shrink:0">
+            <input type="checkbox" id="calcNoFee" onchange="calcGold()" style="width:16px;height:16px;accent-color:var(--gold);cursor:pointer">
+            <span style="font-size:12px;color:var(--txt2)">بفصوص (بدون مصنعية)</span>
+          </label>
+        </div>
+
+        <div class="calc-row" id="calcFeeRow">
+          <div class="calc-row-lbl">ادخل ادخل المصنعية (كم ريال لكل جرام)</div>
+          <input type="number" id="calcFee" value="15" min="0" step="1" oninput="calcGold()"
+            style="width:100%;background:var(--surf);border:.5px solid var(--line);border-radius:10px;color:var(--gold-xl);font-family:'IBM Plex Mono',monospace;font-size:16px;padding:10px 12px;margin-top:4px;outline:none;direction:ltr">
+        </div>
+
+        <div class="calc-row">
+          <div class="calc-row-lbl">عدد الجرامات</div>
+          <input type="number" id="calcGrams" value="10" min="0.01" step="0.01" oninput="calcGold()"
+            style="width:100%;background:var(--surf);border:.5px solid var(--line);border-radius:10px;color:var(--gold-xl);font-family:'IBM Plex Mono',monospace;font-size:16px;padding:10px 12px;margin-top:4px;outline:none;direction:ltr">
+        </div>
+
+        <div class="calc-row" style="background:rgba(201,162,39,.05)">
+          <div class="calc-row-lbl">السعر الإجمالي</div>
+          <div class="calc-row-val" id="calcTotal" style="font-size:22px;color:var(--gold-xl)">—</div>
+          <div style="font-size:11px;color:var(--txt3);margin-top:4px" id="calcBreakdown"></div>
+        </div>
       </div>
     </div>
 
@@ -772,31 +791,27 @@ body{
       <a class="ref-card" href="https://alarbash.sa/live-gold-price" target="_blank" rel="noopener">
         <div class="ref-card-name">مؤسسة الأربش</div>
         <div class="ref-card-url">alarbash.sa</div>
-        <div class="ref-card-tag">الخبر · القطيف ↗</div>
       </a>
       <a class="ref-card" href="https://dewanaldahab.com/ar/LivePricing" target="_blank" rel="noopener">
         <div class="ref-card-name">ديوان الذهب</div>
         <div class="ref-card-url">dewanaldahab.com</div>
-        <div class="ref-card-tag">الإمارات · السعودية ↗</div>
       </a>
       <a class="ref-card" href="https://saudigoldprice.com/" target="_blank" rel="noopener">
         <div class="ref-card-name">أسعار الذهب السعودي</div>
         <div class="ref-card-url">saudigoldprice.com</div>
-        <div class="ref-card-tag">مرجع يومي ↗</div>
       </a>
       <a class="ref-card" href="https://gold.org" target="_blank" rel="noopener">
         <div class="ref-card-name">World Gold Council</div>
         <div class="ref-card-url">gold.org</div>
-        <div class="ref-card-tag">الأسعار الدولية ↗</div>
       </a>
     </div>
 
     <div class="sec-hdr" id="notes" style="margin-top:.85rem"><span class="sec-lbl">ملاحظات مهمة</span><div class="sec-line"></div></div>
     <div class="notes">
-      <b>السعر تقريبي</b> — يعكس سعر المعدن الخام فقط، ولا يشمل المصنعية أو الضريبة أو هامش البيع والشراء.<br>
-      <b>المصادر:</b> gold-api.com · CoinGecko PAXG · Yahoo Finance للمنحنى عند توفره · open.er-api.com<br>
-      <b>الريال السعودي:</b> مربوط بشكل ثابت بـ 1 USD = 3.75 SAR.<br>
-      <b>الفضة:</b> يتم جلبها من XAG/USD عند توفرها من gold-api.com.
+      <b>المصنعية</b> — تتراوح بين 10 و20 ريال للجرام حسب المحل.<br>
+      <b>الآلة الحاسبة</b> — أدخل العيار والمصنعية وعدد الجرامات للحصول على السعر الإجمالي .<br>
+      <b>مواعيد البورصة</b> — تفتح الاثنين 1:00 ص وتغلق الجمعة 12:00 م · عطلة السبت والأحد.<br>
+      <b>المقارنة اليومية</b> — نسبة التغيير محسوبة مقارنةً بسعر إغلاق الجلسة السابقة.
     </div>
 
   </div>
@@ -812,7 +827,9 @@ body{
     &nbsp;·&nbsp;
     <a href="https://www.facebook.com/share/g/1BAFc8suFQ/?mibextid=wwXIfr" target="_blank" rel="noopener">فيسبوك</a>
     &nbsp;·&nbsp;<br><br>
-    <b><a href="https://www.facebook.com/GFX3r/" target="_blank" rel="noopener" class="notes">تصميم وتنفيذ شريف الديب</a></b>
+    <a href="https://www.facebook.com/GFX3r/" target="_blank" rel="noopener" class="credit-badge">
+<B> تصميم وتنفيذ شريف الديب
+    </B></a>
   </div>
 
 </div>
@@ -826,8 +843,7 @@ const KARATS = [
   { k:24, ar:'عيار 24', purity:1,       cls:'k24', fine:'999.9' },
   { k:22, ar:'عيار 22', purity:22/24,   cls:'k22', fine:'916'   },
   { k:21, ar:'عيار 21', purity:21/24,   cls:'k21', fine:'875'   },
-  { k:18, ar:'عيار 18', purity:18/24,   cls:'k18', fine:'750'   },
-  { k:14, ar:'عيار 14', purity:14/24,   cls:'k14', fine:'583'   }
+  { k:18, ar:'عيار 18', purity:18/24,   cls:'k18', fine:'750'   }
 ];
 
 const CURRENCIES = {
@@ -1138,7 +1154,6 @@ async function fetchPrices(){
 function renderAll(){
   $('mainContent').style.display = 'block';
   renderHero();
-  renderCalc();
   renderKarats();
   renderBuySell();
   renderSilver();
@@ -1175,21 +1190,56 @@ function renderHero(){
   const dateStr = new Date().toLocaleDateString('ar-SA', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
 
   $('heroCard').innerHTML = `
-    <div class="hero-lbl">سعر الذهب · عيار 24 · الجرام الواحد</div>
+    <div class="hero-lbl" style="font-size:11px;color:var(--txt3);display:flex;align-items:center;gap:6px"><span style="color:var(--gold-d)">⏱</span> تفتح الاثنين 1:00 ص · تغلق الجمعة 12:00 م · عطلة السبت والأحد</div>
     <div class="hero-body">
-      <div class="hero-main-line">
-        <div>
-          <div class="hero-price">${fmt(g24,c)}</div>
-          <div class="hero-curr">${cu.s} — ${cu.name}</div>
-        </div>
-      </div>
+      ${(()=>{
+        const saNow = new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Riyadh'}));
+        const saH = saNow.getHours();
+        const saM = saNow.getMinutes();
+        const saDay = saNow.getDay();
+        const saTimeStr = saNow.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
+        const sessionOpen = 1*60;
+        const sessionClose = 24*60;
+        const nowMin = saH*60+saM;
+        const isWeekend = saDay===6||saDay===0||(saDay===5&&nowMin===0);
+        const isOpen = !isWeekend && nowMin>=sessionOpen && nowMin<sessionClose;
+        const sessionPct = isOpen ? Math.min(100,((nowMin-sessionOpen)/(sessionClose-sessionOpen))*100) : (nowMin===0?0:100);
+        const dayNames = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+        const dayAr = dayNames[saDay];
+        const remainMin = isOpen ? sessionClose - nowMin : 0;
+        const remainH = Math.floor(remainMin/60);
+        const remainM = remainMin%60;
+        const statusColor = isOpen ? '#35d38d' : '#ff6464';
+        const statusText = isOpen ? 'بورصة الذهب مفتوحة' : 'بورصة الذهب مغلقة';
+        const subText = isOpen
+          ? `سيتم إغلاقه في ${remainH>0?remainH+' ساعة و':''}${remainM} دقيقة`
+          : 'السوق مغلق حالياً — يفتح في الجلسة القادمة';
+        return `
+        <div style="background:rgba(255,255,255,.03);border:.5px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:.3rem">
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px">
+            <span style="width:8px;height:8px;border-radius:50%;background:${statusColor};display:inline-block;flex-shrink:0;box-shadow:0 0 6px ${statusColor}"></span>
+            <span style="font-size:14px;font-weight:700;color:${statusColor}">${statusText}</span>
+          </div>
+          <div style="font-size:12px;color:var(--txt2);margin-bottom:10px;line-height:1.6">${subText}</div>
+          <div style="position:relative;height:5px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden;margin-bottom:6px">
+            <div style="position:absolute;top:0;right:0;height:100%;width:${sessionPct}%;background:${isOpen?'var(--up)':'rgba(255,255,255,.2)'};border-radius:999px;transition:width .5s"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--txt3);font-family:'IBM Plex Mono',monospace;margin-bottom:4px">
+            <span>01:00 AM</span><span>${dayAr}</span><span>12:00 AM</span>
+          </div>
+          <div style="font-size:11px;color:var(--txt3);font-family:'IBM Plex Mono',monospace">السعودية (UTC+3) · ${saTimeStr}</div>
+        </div>`;
+      })()}
 
       <div class="chart-box">
         <div class="chart-top">
           <div>
             <div class="chart-lbl">XAU / USD</div>
             <div class="chart-val">${S.gold.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})} $</div>
-            <div class="chart-sub">آخر 48 ساعة · حتى آخر تحديث</div>
+            <div class="chart-sub">مقارنة بإغلاق الجلسة السابقة</div>
+            <div style="margin-top:6px;padding-top:6px;border-top:.5px solid var(--line);font-size:10px;color:var(--txt3);font-family:'IBM Plex Mono',monospace;line-height:1.7;direction:ltr">
+              ${S.gold.toFixed(2)} × ${CURRENCIES[c].r.toFixed(4)} ÷ ${OZ.toFixed(4)} × purity
+            </div>
           </div>
           <div class="chart-trend">
             <div class="trend-arrow ${trendClass}">${arrow}</div>
@@ -1205,7 +1255,7 @@ function renderHero(){
 
         <div class="chart-foot">
           <span>${S.history.length ? formatChartTime(S.history[0].t) + ' - ' + formatChartTime(S.history[S.history.length-1].t) : '—'}</span>
-          <span>48H</span>
+          <span>منذ الإغلاق</span>
         </div>
       </div>
     </div>
@@ -1234,11 +1284,44 @@ function renderHero(){
   setTimeout(drawGoldChart, 30);
 }
 
+function getPrevSessionClose(){
+  const h = S.history || [];
+  if(!h.length) return null;
+
+  const now = new Date();
+  const nowUTC = now.getTime();
+
+  const closeHourUTC = 21;
+
+  const todayClose = new Date(Date.UTC(
+    now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
+    closeHourUTC, 0, 0, 0
+  )).getTime();
+
+  const prevClose = todayClose - 24 * 60 * 60 * 1000;
+
+  const refTime = nowUTC < todayClose ? prevClose : todayClose;
+
+  const window = 90 * 60 * 1000;
+  const candidates = h.filter(x => x.t <= refTime + window && x.t >= refTime - window);
+  if(!candidates.length) return null;
+
+  const closest = candidates.reduce((a,b) => Math.abs(b.t - refTime) < Math.abs(a.t - refTime) ? b : a);
+  return closest.p;
+}
+
 function getChartDiff(){
   const h = S.history || [];
+  const last = h.length ? h[h.length - 1].p : S.gold;
+
+  const closePrice = getPrevSessionClose();
+  if(closePrice && closePrice > 100){
+    const diff = last - closePrice;
+    return { diff, pct:closePrice ? (diff / closePrice) * 100 : 0 };
+  }
+
   if(h.length >= 2){
     const first = h[0].p;
-    const last = h[h.length - 1].p;
     const diff = last - first;
     return { diff, pct:first ? (diff / first) * 100 : 0 };
   }
@@ -1360,14 +1443,6 @@ function drawGoldChart(){
   ctx.fillText(min.toFixed(0), 2, height - 3);
 }
 
-function renderCalc(){
-  const c = S.cur;
-  const cu = CURRENCIES[c];
-
-  $('calcCard').style.display = 'block';
-  $('calcOz').textContent = `${S.gold.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})} USD/Oz`;
-  $('calcEq').textContent = `${S.gold.toFixed(2)} × ${cu.r.toFixed(4)} ÷ ${OZ.toFixed(4)} × purity`;
-}
 
 function renderKarats(){
   const c = S.cur;
@@ -1416,21 +1491,19 @@ function renderBuySell(){
   const c = S.cur;
   const cu = CURRENCIES[c];
 
-  const sellToCustomerMargin = 0.013;
-  const buyFromCustomerMargin = 0.018;
+  const manufacturingFeeSAR = 10;
+  const manufacturingFee = manufacturingFeeSAR * (CURRENCIES[c].r / CURRENCIES['SAR'].r);
 
   let html = '';
 
   KARATS.filter(x => [24,22,21,18].includes(x.k)).forEach(({ar,purity}) => {
     const raw = gramPrice(S.gold, c, purity);
-    const shopSell = raw * (1 + sellToCustomerMargin);
-    const shopBuy = raw * (1 - buyFromCustomerMargin);
+    const shopSell = raw + manufacturingFee;
 
     html += `
       <div class="bsrow">
         <div class="bs-k">${ar}</div>
         <div class="bs-buy">${fmt(shopSell,c)}<div class="bs-unit">${cu.s}</div></div>
-        <div class="bs-sell">${fmt(shopBuy,c)}<div class="bs-unit">${cu.s}</div></div>
       </div>
     `;
   });
@@ -1439,30 +1512,50 @@ function renderBuySell(){
 }
 
 function renderSilver(){
+  calcGold();
+}
+
+function calcGold(){
+  if(!S.gold) return;
+
   const c = S.cur;
   const cu = CURRENCIES[c];
 
-  if(!S.silver){
-    $('silverCard').innerHTML = `
-      <div style="font-size:13px;color:var(--txt2);width:100%;text-align:center;padding:.3rem 0">
-        لا توجد بيانات للفضة حالياً من المصدر الحالي
-      </div>
-    `;
+  const karatVal = parseInt($('calcKarat')?.value || '21');
+  const noFee = $('calcNoFee')?.checked || false;
+  const feeRow = $('calcFeeRow');
+  const feeInput = $('calcFee');
+  const gramsInput = $('calcGrams');
+  const totalEl = $('calcTotal');
+  const breakEl = $('calcBreakdown');
+
+  if(feeRow) feeRow.style.display = noFee ? 'none' : '';
+
+  const purity = karatVal / 24;
+  const gramRaw = gramPrice(S.gold, c, purity);
+
+  const feeSAR = noFee ? 0 : parseFloat(feeInput?.value || '0');
+  const fee = feeSAR * (cu.r / CURRENCIES['SAR'].r);
+
+  const grams = parseFloat(gramsInput?.value || '0');
+
+  if(!grams || grams <= 0){
+    if(totalEl) totalEl.textContent = '—';
+    if(breakEl) breakEl.textContent = '';
     return;
   }
 
-  const price = gramPrice(S.silver, c, 1);
+  const pricePerGram = gramRaw + fee;
+  const total = pricePerGram * grams;
 
-  $('silverCard').innerHTML = `
-    <div>
-      <div class="sil-name">فضة — Silver</div>
-      <div class="sil-sub">عيار 999 · جرام واحد</div>
-    </div>
-    <div style="text-align:left;direction:ltr">
-      <div class="sil-price">${fmt(price,c)}</div>
-      <div class="sil-curr">${cu.s} / g · ${S.silver.toFixed(3)} $/oz</div>
-    </div>
-  `;
+  if(totalEl) totalEl.textContent = fmt(total, c) + ' ' + cu.s;
+  if(breakEl){
+    if(noFee){
+      breakEl.textContent = `${fmt(gramRaw,c)} ${cu.s}/جرام × ${grams} جرام`;
+    } else {
+      breakEl.textContent = `(${fmt(gramRaw,c)} + ${fmt(fee,c)} مصنعية) × ${grams} جرام`;
+    }
+  }
 }
 
 function renderMeta(){
