@@ -756,7 +756,7 @@ body{
         </div>
 
         <div class="calc-row" id="calcFeeRow">
-          <div class="calc-row-lbl">ادخل ادخل المصنعية (كم ريال لكل جرام)</div>
+          <div class="calc-row-lbl">المصنعية (ريال لكل جرام)</div>
           <input type="number" id="calcFee" value="15" min="0" step="1" oninput="calcGold()"
             style="width:100%;background:var(--surf);border:.5px solid var(--line);border-radius:10px;color:var(--gold-xl);font-family:'IBM Plex Mono',monospace;font-size:16px;padding:10px 12px;margin-top:4px;outline:none;direction:ltr">
         </div>
@@ -930,7 +930,6 @@ async function fetchGoldPrice(){
     const stored = parseFloat(localStorage.getItem('_gp') || '0');
 
     const nowUTC = Date.now();
-    const closeHourUTC = 21;
     const todayCloseUTC = new Date(new Date().toISOString().slice(0,10)+'T21:00:00Z').getTime();
     const prevCloseUTC = todayCloseUTC - 24*60*60*1000;
     const refCloseUTC = nowUTC < todayCloseUTC ? prevCloseUTC : todayCloseUTC;
@@ -1003,7 +1002,10 @@ async function fetchYahooHistory(){
 
   if(!ts.length || !close.length) return [];
 
-  const cutoff = Date.now() - CHART_HOURS * 60 * 60 * 1000;
+  const nowUTC = Date.now();
+  const todayCloseUTC = new Date(new Date().toISOString().slice(0,10)+'T21:00:00Z').getTime();
+  const prevCloseUTC  = todayCloseUTC - 24*60*60*1000;
+  const cutoff = nowUTC < todayCloseUTC ? prevCloseUTC : todayCloseUTC;
 
   return ts.map((t,i) => ({
     t:t * 1000,
