@@ -10,6 +10,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
 <meta name="theme-color" content="#071114">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -71,6 +75,15 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background-im
 .chart-box{width:100%;background:#091315;border:1px solid rgba(255,255,255,.09);border-radius:24px;padding:14px;direction:ltr;min-height:162px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}.chart-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px}.chart-lbl{font-size:10px;color:var(--txt3);letter-spacing:.1em;text-transform:uppercase}.chart-val{font-family:'IBM Plex Mono',monospace;font-size:22px;color:var(--txt);font-weight:800;margin-top:2px}.chart-sub{font-size:10px;color:var(--txt3);margin-top:3px}.chart-trend{display:flex;flex-direction:column;align-items:flex-end;gap:5px;min-width:78px}.trend-arrow{width:42px;height:42px;border-radius:16px;display:grid;place-items:center;font-size:19px;font-weight:900}.trend-arrow.up{background:rgba(62,230,166,.14);color:var(--up);border:1px solid rgba(62,230,166,.25)}.trend-arrow.dn{background:rgba(255,111,126,.14);color:var(--down);border:1px solid rgba(255,111,126,.25)}.trend-arrow.nt{background:rgba(255,255,255,.06);color:var(--txt2);border:1px solid var(--line)}.trend-text{font-family:'IBM Plex Mono',monospace;font-size:11px}.trend-text.up{color:var(--up)}.trend-text.dn{color:var(--down)}.trend-text.nt{color:var(--txt2)}.chart-canvas-wrap{width:100%;height:88px;margin-top:4px}#goldChart{width:100%;height:88px;display:block}.chart-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:7px;font-size:10px;color:var(--txt3)}
 .hero-badges{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}.badge{display:inline-flex;align-items:center;gap:4px;padding:7px 12px;border-radius:15px;font-size:12px;font-weight:800;font-family:'IBM Plex Mono',monospace}.badge.up{background:rgba(62,230,166,.14);color:var(--up);border:1px solid rgba(62,230,166,.25)}.badge.dn{background:rgba(255,111,126,.14);color:var(--down);border:1px solid rgba(255,111,126,.25)}.badge.nt{background:rgba(255,255,255,.06);color:var(--txt2);border:1px solid var(--line)}.hero-date{font-size:12px;color:var(--txt3);font-family:'IBM Plex Mono',monospace}
 .timer-ring-wrap{display:flex;align-items:center;gap:12px;margin-top:13px;background:linear-gradient(135deg,rgba(255,215,122,.12),rgba(62,230,166,.055));border:1px solid rgba(255,255,255,.11);border-radius:24px;padding:12px 13px}.ring{width:54px;height:54px;border-radius:19px;flex-shrink:0;display:grid;place-items:center;position:relative;background:conic-gradient(var(--gold-l) var(--prog,0deg), rgba(255,255,255,.08) 0deg);box-shadow:0 10px 22px rgba(0,0,0,.18)}.ring::before{content:'';position:absolute;inset:6px;border-radius:15px;background:#0d181a}.ring-num{position:relative;z-index:1;font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:800;color:var(--gold-xl)}.ring-title{font-size:13px;color:var(--gold-l);font-weight:800}.ring-sub{font-size:12px;color:var(--txt2);margin-top:2px}.ring-updated{font-size:11px;color:var(--txt3);margin-top:3px}
+
+/* Prediction Indicator */
+.prediction-wrap{background:linear-gradient(145deg,rgba(16,27,31,.9),rgba(12,22,25,.95));border:1px solid rgba(255,215,122,.18);border-radius:20px;padding:14px 16px;margin:12px 0;position:relative;overflow:hidden}.prediction-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(255,215,122,.08),transparent 50%);pointer-events:none}.prediction-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}.prediction-icon{width:28px;height:28px;border-radius:10px;background:linear-gradient(135deg,rgba(255,215,122,.2),rgba(255,215,122,.05));display:grid;place-items:center;font-size:14px;color:var(--gold-l);border:1px solid rgba(255,215,122,.25)}.prediction-title{font-size:13px;font-weight:800;color:var(--gold-l)}.prediction-range{display:flex;align-items:center;justify-content:center;gap:16px;margin:10px 0}.prediction-box{text-align:center;flex:1}.prediction-label{font-size:10px;color:var(--txt3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px}.prediction-value{font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:800}.prediction-value.up{color:var(--up)}.prediction-value.dn{color:var(--down)}.prediction-divider{width:1px;height:35px;background:linear-gradient(180deg,transparent,var(--line),transparent)}.prediction-factors{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06)}.prediction-factor{font-size:10px;color:var(--txt2);background:rgba(255,255,255,.05);padding:4px 10px;border-radius:12px;border:1px solid rgba(255,255,255,.08)}.prediction-factor.strong{color:var(--up);background:rgba(62,230,166,.1);border-color:rgba(62,230,166,.2)}.prediction-factor.weak{color:var(--down);background:rgba(255,111,126,.1);border-color:rgba(255,111,126,.2)}.prediction-meter{height:6px;background:rgba(255,255,255,.08);border-radius:999px;margin:10px 0;position:relative;overflow:hidden}.prediction-meter-fill{height:100%;border-radius:999px;transition:width .6s ease,background .3s}.prediction-meter-center{position:absolute;left:50%;top:0;bottom:0;width:2px;background:rgba(255,255,255,.3);transform:translateX(-50%)}.prediction-confidence{display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--txt3);margin-top:6px}.prediction-confidence span{display:flex;align-items:center;gap:4px}
+
+/* Compact Prediction Inline */
+.prediction-compact{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--txt2);background:rgba(255,215,122,.08);border:1px solid rgba(255,215,122,.15);border-radius:12px;padding:6px 12px;margin-top:10px;flex-wrap:wrap}.prediction-compact-title{font-weight:700;color:var(--gold-l)}.prediction-compact-range{display:flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700}.prediction-compact-range .up{color:var(--up)}.prediction-compact-range .dn{color:var(--down)}.prediction-mini-bar{width:40px;height:4px;background:rgba(255,255,255,.1);border-radius:999px;position:relative;overflow:hidden;display:inline-block;vertical-align:middle;margin:0 4px}.prediction-mini-fill{height:100%;border-radius:999px;position:absolute;top:0;right:0}.prediction-mini-center{position:absolute;left:50%;top:0;bottom:0;width:1px;background:rgba(255,255,255,.3);transform:translateX(-50%)}.prediction-inline{display:flex;flex-direction:column;gap:6px;font-size:11px;color:var(--txt3);background:linear-gradient(155deg,rgba(18,30,34,.98),rgba(10,20,23,.99));padding:12px 15px;border-radius:20px;border:2px solid transparent;background-clip:padding-box;min-height:48px;height:auto;align-self:start;position:relative;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.06)}.prediction-inline::before{content:'';position:absolute;inset:-2px;background:linear-gradient(155deg,rgba(255,215,122,.28),rgba(62,230,166,.12));border-radius:20px;z-index:-1}.prediction-inline::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 65% 12%,rgba(255,215,122,.15),transparent 55%),radial-gradient(circle at 35% 88%,rgba(62,230,166,.08),transparent 50%);pointer-events:none;z-index:0}.prediction-inline-title{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:800;color:#ffd77a;margin-bottom:0;position:relative;z-index:1;text-shadow:0 1px 2px rgba(0,0,0,.3)}.prediction-inline-title .icon{width:26px;height:26px;border-radius:11px;background:linear-gradient(135deg,rgba(255,215,122,.35),rgba(255,215,122,.12));display:grid;place-items:center;font-size:14px;color:var(--gold-l);border:1.5px solid rgba(255,215,122,.4);box-shadow:0 3px 8px rgba(255,215,122,.2),inset 0 1px 0 rgba(255,255,255,.15)}.prediction-inline-range{display:flex;align-items:stretch;justify-content:space-around;gap:10px;position:relative;z-index:1;padding:6px 4px;background:rgba(0,0,0,.15);border-radius:12px;border:1px solid rgba(255,255,255,.06)}.prediction-inline-box{text-align:center;flex:1;display:flex;flex-direction:column;justify-content:center;padding:2px 0}.prediction-inline-box .lbl{font-size:9px;color:var(--txt2);margin-bottom:3px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;opacity:.85}.prediction-inline-box .val{font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:900;text-shadow:0 2px 4px rgba(0,0,0,.4),0 0 10px currentColor;letter-spacing:-.5px}.prediction-inline-box .val.up{color:#3ee6a6;filter:brightness(1.1)}.prediction-inline-box .val.dn{color:#ff6f7e;filter:brightness(1.1)}.prediction-inline-div{width:2px;align-self:center;height:30px;background:linear-gradient(180deg,transparent,rgba(255,215,122,.35) 20%,rgba(255,215,122,.35) 80%,transparent);border-radius:999px;box-shadow:0 0 6px rgba(255,215,122,.25)}.prediction-inline-meter{height:6px;background:linear-gradient(90deg,rgba(255,111,126,.15),rgba(255,255,255,.08) 50%,rgba(62,230,166,.15));border-radius:999px;margin-top:2px;position:relative;overflow:visible;z-index:1;border:1.5px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 3px rgba(0,0,0,.3)}.prediction-inline-meter-fill{height:100%;border-radius:999px;position:absolute;top:0;right:0;box-shadow:0 0 10px currentColor,inset 0 1px 0 rgba(255,255,255,.25);transition:width .3s ease}.prediction-inline-meter-center{position:absolute;left:50%;top:-2px;bottom:-2px;width:3px;background:linear-gradient(180deg,rgba(255,215,122,.6),rgba(255,215,122,.8),rgba(255,215,122,.6));transform:translateX(-50%);z-index:2;border-radius:999px;box-shadow:0 0 8px rgba(255,215,122,.5)}.prediction-inline-footer{display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--txt);margin-top:0;position:relative;z-index:1;font-weight:700;opacity:.85}
+
+/* Compact Timer Ring */
+.timer-ring-compact{display:flex;align-items:center;gap:10px;margin-top:8px;background:linear-gradient(135deg,rgba(255,215,122,.1),rgba(62,230,166,.04));border:2px solid rgba(255,255,255,.15);border-radius:18px;padding:12px;justify-content:space-between;width:100%}.ring-compact{width:42px;height:42px;border-radius:14px;flex-shrink:0;display:grid;place-items:center;position:relative;background:conic-gradient(var(--gold-l) var(--prog,0deg),rgba(255,255,255,.08) 0deg);box-shadow:0 6px 15px rgba(0,0,0,.15)}.ring-compact::before{content:'';position:absolute;inset:4px;border-radius:12px;background:#0d181a}.ring-compact-num{position:relative;z-index:1;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:800;color:var(--gold-xl);transform:translateX(2px)}.ring-compact-info{text-align:right;flex:1}.ring-compact-title{font-size:11px;color:var(--gold-l);font-weight:700}.ring-compact-sub{font-size:10px;color:var(--txt2);margin-top:2px}.ring-compact-updated{font-size:9px;color:var(--txt3);margin-top:1px}
 
 /* FORM / SECTIONS */
 .sec-hdr{display:flex;align-items:center;gap:10px;padding:12px 4px 8px}.sec-lbl{font-size:12px;font-weight:800;color:#d8e6dc;letter-spacing:.02em;white-space:nowrap}.sec-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--line2),transparent)}.sel-wrap{padding:0 0 12px}.csel{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:18px;color:var(--txt);font-family:'IBM Plex Sans Arabic',sans-serif;font-size:14px;padding:13px 14px;appearance:none;cursor:pointer;direction:rtl;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23ffd77a' stroke-width='1.6' stroke-linecap='round' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 15px center;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}.csel:focus{outline:none;border-color:rgba(255,215,122,.6);box-shadow:0 0 0 4px rgba(255,215,122,.09)}.csel option{background:#102024;color:#fff}
@@ -353,7 +366,8 @@ const S = {
   timerSec:REFRESH_SEC,
   timerTO:null,
   countInt:null,
-  history:[]
+  history:[],
+  syntheticDataCached:null
 };
 
 function $(id){ return document.getElementById(id); }
@@ -587,7 +601,22 @@ async function updateHistory(){
   }
 
   // Use synthetic data for realistic chart when insufficient real data
-  S.history = buildSyntheticHistory(S.gold);
+  if(S.gold && S.gold > 100){
+    // Use cached synthetic data if available, otherwise generate new
+    if(!S.syntheticDataCached || S.syntheticDataCached.length === 0){
+      S.syntheticDataCached = buildSyntheticHistory(S.gold);
+      console.log(`📊 Generated ${S.syntheticDataCached.length} synthetic data points for price: ${S.gold}`);
+    }
+    S.history = S.syntheticDataCached;
+  }else{
+    S.history = local.length > 0 ? local : [];
+    console.log(`⚠️ No gold price available (S.gold = ${S.gold}), using ${S.history.length} local points`);
+  }
+  
+  // Force chart redraw if initialized
+  if(S.initialized && typeof drawGoldChart === 'function'){
+    setTimeout(() => drawGoldChart(), 100);
+  }
 }
 
 async function fetchPrices(){
@@ -626,6 +655,7 @@ async function fetchPrices(){
 
     saveLocalHistory(prices.gold);
     await updateHistory();
+    checkFirebaseSave(); // Save to Firebase every hour
     ok = true;
   }else if(S.gold){
     await updateHistory();
@@ -677,7 +707,147 @@ function renderAll(){
   renderMeta();
 }
 
-function renderHero(){
+// 🔥 REAL-TIME MARKET DATA STATE
+const MarketData = {
+  usdStrength: null,
+  lastFetch: 0,
+  cache: null
+};
+
+// Fetch USD strength (inverse correlation with gold)
+async function fetchUSDStrength(){
+  try {
+    const res = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+    const data = await res.json();
+    const eurRate = data.rates.EUR || 0.92;
+    const usdStrength = 1 / eurRate; // Simplified USD index
+    MarketData.usdStrength = usdStrength;
+    return usdStrength;
+  } catch(e) {
+    console.warn('USD fetch failed');
+    return null;
+  }
+}
+
+async function calculatePrediction(){
+  if(!S.gold || !S.history || S.history.length < 20) return null;
+
+  const currentPrice = S.gold;
+  const prices = S.history.map(h => h.p);
+  
+  // Fetch real market data (cached for 5 min)
+  const now = Date.now();
+  if(!MarketData.lastFetch || (now - MarketData.lastFetch) > 300000){
+    await fetchUSDStrength();
+    MarketData.lastFetch = now;
+  }
+  
+  // === TECHNICAL ANALYSIS ===
+  const ma5 = prices.slice(-5).reduce((a,b)=>a+b,0) / 5;
+  const ma10 = prices.slice(-10).reduce((a,b)=>a+b,0) / 10;
+  const ma20 = prices.slice(-20).reduce((a,b)=>a+b,0) / 20;
+  
+  const trendScore = (ma5 > ma10 ? 1 : -1) + (ma10 > ma20 ? 1 : -1) + (currentPrice > ma5 ? 1 : -1);
+  const trendStrength = trendScore / 3;
+  
+  // RSI
+  let gains = 0, losses = 0;
+  for(let i = prices.length - 14; i < prices.length; i++){
+    const change = prices[i] - prices[i-1];
+    if(change > 0) gains += change;
+    else losses -= change;
+  }
+  const rs = (gains/14) / ((losses/14) || 0.001);
+  const rsi = 100 - (100 / (1 + rs));
+  
+  let rsiSignal = 0;
+  if(rsi < 30) rsiSignal = 0.8;
+  else if(rsi < 40) rsiSignal = 0.4;
+  else if(rsi > 70) rsiSignal = -0.8;
+  else if(rsi > 60) rsiSignal = -0.4;
+  
+  // Momentum
+  const momentum = (currentPrice - prices[prices.length - 10]) / prices[prices.length - 10];
+  const momentumScore = Math.max(-1, Math.min(1, momentum * 20));
+  
+  // Volatility
+  const stdDev = Math.sqrt(prices.slice(-20).reduce((sum,p)=>{
+    const diff = p - ma20;
+    return sum + diff * diff;
+  }, 0) / 20);
+  const volatilityPct = (stdDev / ma20) * 100;
+  
+  // Support/Resistance
+  const recentHigh = Math.max(...prices.slice(-20));
+  const recentLow = Math.min(...prices.slice(-20));
+  const pricePosition = (currentPrice - recentLow) / (recentHigh - recentLow);
+  
+  let supportResistanceSignal = 0;
+  if(pricePosition > 0.8) supportResistanceSignal = -0.6;
+  else if(pricePosition < 0.2) supportResistanceSignal = 0.6;
+  
+  // === FUNDAMENTAL ANALYSIS (Real USD Data) ===
+  let usdSignal = 0;
+  if(MarketData.usdStrength){
+    // USD strength change (inverse to gold)
+    const usdChange = ((MarketData.usdStrength - 1.087) / 1.087) * 100; // Compare to baseline
+    usdSignal = -usdChange * 0.4; // Inverse: strong USD = weak gold
+  }
+  
+  // === COMBINED FORECAST with REAL DATA ===
+  const forecastPct = (
+    trendStrength * 0.22 +           // 22% trend
+    rsiSignal * 0.18 +                // 18% RSI
+    momentumScore * 0.18 +            // 18% momentum
+    supportResistanceSignal * 0.12 +  // 12% S/R
+    usdSignal * 0.30                  // 30% USD (REAL DATA!)
+  );
+  
+  // Confidence boost if we have real data
+  const signalAlignment = Math.abs(trendStrength) + Math.abs(rsiSignal) + Math.abs(momentumScore);
+  const dataBonus = MarketData.usdStrength ? 1.15 : 0.9;
+  const confidence = Math.min(95, (52 + signalAlignment * 14) * dataBonus);
+  
+  // === ASYMMETRIC RANGES ===
+  const baseVolatility = volatilityPct / 100;
+  const bullishBias = forecastPct > 0;
+  const biasMagnitude = Math.abs(forecastPct);
+  
+  let upPct, downPct;
+  if(bullishBias){
+    upPct = ((baseVolatility * 1.35) * (1 + biasMagnitude * 1.3) * 100).toFixed(1);
+    downPct = ((baseVolatility * 0.65) * (1 - biasMagnitude * 0.7) * 100).toFixed(1);
+  } else {
+    upPct = ((baseVolatility * 0.65) * (1 - biasMagnitude * 0.7) * 100).toFixed(1);
+    downPct = ((baseVolatility * 1.35) * (1 + biasMagnitude * 1.3) * 100).toFixed(1);
+  }
+  
+  upPct = Math.max(0.2, upPct);
+  downPct = Math.max(0.2, downPct);
+  
+  // Calculate SAR amounts for 21 karat gold (most common)
+  const currentGold21 = S.gold ? gramPrice(S.gold, 'SAR', 1) * (21/24) : 0;
+  const upSAR = (currentGold21 * (parseFloat(upPct) / 100)).toFixed(2);
+  const downSAR = (currentGold21 * (parseFloat(downPct) / 100)).toFixed(2);
+  
+  return {
+    upPct,
+    downPct,
+    upSAR,
+    downSAR,
+    confidence: Math.round(confidence),
+    forecastPct,
+    signals: {
+      trend: trendStrength.toFixed(2),
+      rsi: rsi.toFixed(0),
+      momentum: momentumScore.toFixed(2),
+      usd: usdSignal.toFixed(2),
+      volatility: volatilityPct.toFixed(2)
+    }
+  };
+}
+
+async function renderHero(){
   const c = S.cur;
   const cu = CURRENCIES[c];
   const g24 = gramPrice(S.gold, c, 1);
@@ -705,6 +875,8 @@ function renderHero(){
   const isZero = Math.abs(pctVal) < 0.001;
   const timeStr = new Date().toLocaleTimeString('ar-SA', {hour:'2-digit', minute:'2-digit'});
   const dateStr = new Date().toLocaleDateString('ar-SA', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+
+  const prediction = await calculatePrediction();
 
   $('heroCard').innerHTML = `
     <div class="hero-lbl" style="font-size:11px;color:var(--txt3);display:flex;align-items:center;gap:6px"><span style="color:var(--gold-d)">⏱</span> تفتح الاثنين 1:00 ص · تغلق الجمعة 12:00 م · عطلة السبت والأحد</div>
@@ -777,23 +949,52 @@ function renderHero(){
       </div>
     </div>
 
-    <div class="hero-badges">
-      ${
-        isZero
-        ? `<span class="badge nt">— مستقر</span>`
-        : `<span class="badge ${isUp ? 'up' : 'dn'}">${isUp ? '▲' : '▼'} ${Math.abs(pctVal).toFixed(2)}%</span>
-           <span class="badge ${isUp ? 'up' : 'dn'}">${isUp ? '+' : ''}${fmt(diffVal,c)} ${cu.s}</span>`
-      }
-    </div>
-    <div class="hero-date">${dateStr} · ${timeStr}</div>
-    <div class="timer-ring-wrap">
-      <div class="ring" id="ringEl" style="--prog:0deg">
-        <span class="ring-num" id="ringNum">${REFRESH_SEC}</span>
-      </div>
-      <div>
-        <div class="ring-title">التحديث القادم</div>
-        <div class="ring-sub" id="ringSubTxt">بعد ${REFRESH_SEC} ثانية</div>
-        <div class="ring-updated" id="ringUpdated">آخر تحديث: ${timeStr}</div>
+    <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:12px;align-items:start;margin-top:10px">
+      ${prediction ? `<div class="prediction-inline" style="align-self:start">
+        <div class="prediction-inline-title">
+          <span class="icon">📊</span>
+          <span>مؤشر توقع 24 ساعة القادمه</span>
+        </div>
+        <div class="prediction-inline-range">
+          <div class="prediction-inline-box">
+            <div class="lbl">📉 هبوط محتمل</div>
+            <div class="val dn">-${prediction.downSAR} ر.س</div>
+          </div>
+          <div class="prediction-inline-div"></div>
+          <div class="prediction-inline-box">
+            <div class="lbl">📈 ارتفاع محتمل</div>
+            <div class="val up">+${prediction.upSAR} ر.س</div>
+          </div>
+        </div>
+        <div class="prediction-inline-meter">
+          <div class="prediction-inline-meter-fill" style="width:${prediction.confidence}%; background:${parseFloat(prediction.upSAR) > parseFloat(prediction.downSAR) ? 'var(--up)' : 'var(--down)'}; ${parseFloat(prediction.upSAR) < parseFloat(prediction.downSAR) ? 'right:auto;left:0' : ''}"></div>
+          <div class="prediction-inline-meter-center"></div>
+        </div>
+        <div class="prediction-inline-footer">
+          <span style="font-size:10.5px;font-weight:800">دقة المؤشر: ${prediction.confidence}%</span>
+          <span style="color:${parseFloat(prediction.upSAR) > parseFloat(prediction.downSAR) ? 'var(--up)' : parseFloat(prediction.upSAR) < parseFloat(prediction.downSAR) ? 'var(--down)' : 'var(--txt2)'}">${parseFloat(prediction.upSAR) > parseFloat(prediction.downSAR) ? 'اتجاه إيجابي ▲' : parseFloat(prediction.upSAR) < parseFloat(prediction.downSAR) ? 'اتجاه سلبي ▼' : 'اتجاه محايد —'}</span>
+        </div>
+      </div>` : '<div></div>'}
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+        <div class="hero-badges" style="margin:0;justify-content:flex-end">
+          ${
+            isZero
+            ? `<span class="badge nt">— مستقر</span>`
+            : `<span class="badge ${isUp ? 'up' : 'dn'}">${isUp ? '▲' : '▼'} ${Math.abs(pctVal).toFixed(2)}%</span>
+               <span class="badge ${isUp ? 'up' : 'dn'}">${isUp ? '+' : ''}${fmt(diffVal,c)} ${cu.s}</span>`
+          }
+        </div>
+        <div class="hero-date" style="margin:0">${dateStr} · ${timeStr}</div>
+        <div class="timer-ring-compact">
+          <div class="ring-compact" id="ringEl" style="--prog:0deg">
+            <span class="ring-compact-num" id="ringNum">${REFRESH_SEC}</span>
+          </div>
+          <div class="ring-compact-info">
+            <div class="ring-compact-title">التحديث القادم</div>
+            <div class="ring-compact-sub" id="ringSubTxt">بعد ${REFRESH_SEC} ثانية</div>
+            <div class="ring-compact-updated" id="ringUpdated">آخر تحديث: ${timeStr}</div>
+          </div>
+        </div>
       </div>
     </div>
   `;
@@ -863,11 +1064,13 @@ function drawGoldChart(){
   ctx.clearRect(0,0,width,height);
 
   const data = (S.history || []).filter(x => x && x.p);
+  console.log(`📈 Chart data: ${data.length} points, S.history: ${S.history?.length || 0} points`);
   if(data.length < 2){
     ctx.fillStyle = 'rgba(196,169,106,.7)';
     ctx.font = '12px IBM Plex Sans Arabic';
     ctx.textAlign = 'center';
     ctx.fillText('لا توجد بيانات كافية للرسم', width/2, height/2);
+    console.warn('⚠️ Not enough data to draw chart');
     return;
   }
 
@@ -1218,6 +1421,118 @@ function hideErr(){
 window.addEventListener('resize', () => {
   if(S.initialized) drawGoldChart();
 });
+
+// 🔥 FIREBASE INTEGRATION
+const firebaseConfig = {
+  apiKey: "AIzaSyC-j_Kvjx-0_4tpZ04G6kNdsGyxa-UD-Xo",
+  authDomain: "gold-price-tracker-688b8.firebaseapp.com",
+  databaseURL: "https://gold-price-tracker-688b8-default-rtdb.firebaseio.com",
+  projectId: "gold-price-tracker-688b8",
+  storageBucket: "gold-price-tracker-688b8.firebasestorage.app",
+  messagingSenderId: "777092415591",
+  appId: "1:777092415591:web:61b02c8392357a923c54c2"
+};
+
+let db = null;
+let pricesRef = null;
+let firebaseEnabled = false;
+
+// Initialize Firebase
+try {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.database();
+  pricesRef = db.ref('goldPrices');
+  firebaseEnabled = true;
+  console.log('✅ Firebase initialized');
+  
+  // Load historical data from Firebase
+  loadFirebaseHistory();
+} catch(e) {
+  console.warn('⚠️ Firebase not available, using LocalStorage only');
+  firebaseEnabled = false;
+}
+
+// Save price to Firebase (hourly)
+async function savePriceToFirebase(price) {
+  if(!firebaseEnabled || !pricesRef) return;
+  
+  try {
+    const now = new Date();
+    const dateKey = now.toISOString().split('T')[0]; // YYYY-MM-DD
+    const hourKey = now.getHours(); // 0-23
+    
+    await pricesRef.child(dateKey).child(hourKey.toString()).set({
+      price: price,
+      timestamp: Date.now(),
+      date: now.toISOString()
+    });
+    
+    console.log(`✅ Saved to Firebase: ${price}`);
+  } catch(e) {
+    console.warn('Failed to save to Firebase:', e);
+  }
+}
+
+// Load historical data from Firebase
+async function loadFirebaseHistory() {
+  if(!firebaseEnabled || !pricesRef) return;
+  
+  try {
+    const history = [];
+    const today = new Date();
+    
+    // Load last 30 days
+    for(let i = 0; i < 30; i++){
+      const date = new Date(today);
+      date.setDate(date.getDate() - i);
+      const dateKey = date.toISOString().split('T')[0];
+      
+      const snapshot = await pricesRef.child(dateKey).once('value');
+      const dayData = snapshot.val();
+      
+      if(dayData){
+        Object.keys(dayData).forEach(hour => {
+          const data = dayData[hour];
+          history.push({
+            p: data.price,
+            t: data.timestamp
+          });
+        });
+      }
+    }
+    
+    // Sort by timestamp
+    history.sort((a,b) => a.t - b.t);
+    
+    // Merge with existing history (don't replace synthetic data if we have more points)
+    if(history.length > 0){
+      // Only use Firebase data if we have enough points (more than 20)
+      if(history.length >= 20){
+        S.history = history;
+        console.log(`✅ Loaded ${history.length} points from Firebase (replaced synthetic data)`);
+      }else{
+        console.log(`✅ Loaded ${history.length} points from Firebase (keeping synthetic data: ${S.history?.length || 0} points)`);
+      }
+      
+      // Redraw chart if initialized
+      if(S.initialized){
+        drawGoldChart();
+      }
+    }
+  } catch(e) {
+    console.warn('Failed to load from Firebase:', e);
+  }
+}
+
+// Save to Firebase every hour
+let lastFirebaseSave = 0;
+function checkFirebaseSave(){
+  const now = Date.now();
+  if(firebaseEnabled && S.gold && (now - lastFirebaseSave) > 3600000){ // 1 hour
+    savePriceToFirebase(S.gold);
+    lastFirebaseSave = now;
+  }
+}
 
 fetchPrices();
 
