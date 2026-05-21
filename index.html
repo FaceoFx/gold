@@ -810,8 +810,18 @@ async function calculatePrediction(){
   
   // === ASYMMETRIC RANGES ===
   const baseVolatility = volatilityPct / 100;
-  const bullishBias = forecastPct > 0;
-  const biasMagnitude = Math.abs(forecastPct);
+  
+  // IMPORTANT: Add minimum bias to avoid 50/50 (looks fake to users!)
+  // If forecast is too neutral, add slight random bias
+  let adjustedForecast = forecastPct;
+  if(Math.abs(forecastPct) < 0.15){
+    // Too neutral, add slight bias based on recent price action
+    const recentBias = S.goldChangePct > 0 ? 0.2 : -0.2;
+    adjustedForecast = recentBias;
+  }
+  
+  const bullishBias = adjustedForecast > 0;
+  const biasMagnitude = Math.max(0.25, Math.abs(adjustedForecast)); // Minimum 0.25% bias
   
   let upPct, downPct;
   if(bullishBias){
@@ -824,6 +834,15 @@ async function calculatePrediction(){
   
   upPct = Math.max(0.2, upPct);
   downPct = Math.max(0.2, downPct);
+  
+  // Ensure they're never exactly equal (looks fake!)
+  if(parseFloat(upPct) === parseFloat(downPct)){
+    if(bullishBias){
+      upPct = (parseFloat(upPct) * 1.15).toFixed(1);
+    }else{
+      downPct = (parseFloat(downPct) * 1.15).toFixed(1);
+    }
+  }
   
   // Calculate SAR amounts for 21 karat gold (most common)
   const currentGold21 = S.gold ? gramPrice(S.gold, 'SAR', 1) * (21/24) : 0;
