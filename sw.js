@@ -1,48 +1,61 @@
-const CACHE_NAME = 'gold-price-v6';
-const urlsToCache = [
-  './index.html',
+const CACHE_NAME = 'gold-price-v22-stable-forecast';
+const STATIC_CACHE = [
+  './manifest.json',
   'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap'
 ];
 
 self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
-      .catch(() => {})
-  );
+  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_CACHE)).catch(() => {}));
   self.skipWaiting();
 });
 
 self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames
-          .filter(name => name !== CACHE_NAME)
-          .map(name => caches.delete(name))
-      );
-    })
-  );
+  event.waitUntil(caches.keys().then(names => Promise.all(names.filter(n => n !== CACHE_NAME).map(n => caches.delete(n)))));
   self.clients.claim();
 });
 
+function isApiRequest(req){
+  return /gold-api|coingecko|open\.er-api|currency-api|query1\.finance|finance\/chart|corsproxy|allorigins|firebaseio|gstatic\.com\/firebase/i.test(req.url);
+}
+
+async function networkFirst(request){
+  const cache = await caches.open(CACHE_NAME);
+  try{
+    const fresh = await fetch(request, { cache:'no-store' });
+    if(fresh && fresh.ok) cache.put(request, fresh.clone()).catch(() => {});
+    return fresh;
+  }catch(_){
+    return (await cache.match(request)) || (await cache.match('./index.html')) || Response.error();
+  }
+}
+
+async function staleWhileRevalidate(request){
+  const cache = await caches.open(CACHE_NAME);
+  const cached = await cache.match(request);
+  const update = fetch(request).then(res => {
+    if(res && res.ok) cache.put(request, res.clone()).catch(() => {});
+    return res;
+  }).catch(() => null);
+  return cached || update || fetch(request);
+}
+
 self.addEventListener('fetch', event => {
-  // Network-first strategy for API calls
-  if (event.request.url.includes('api') || event.request.url.includes('price')) {
-    event.respondWith(
-      fetch(event.request)
-        .then(response => response)
-        .catch(() => caches.match(event.request))
-    );
+  const req = event.request;
+  if(req.method !== 'GET') return;
+  const url = new URL(req.url);
+
+  // Never cache prices, charts, exchange rates, or Firebase data. v22
+  if(isApiRequest(req)){
+    event.respondWith(fetch(req, { cache:'no-store' }).catch(() => Response.error()));
     return;
   }
 
-  // Cache-first for static assets
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        if (response) return response;
-        return fetch(event.request).catch(() => caches.match('./index.html'));
-      })
-  );
+  if(req.mode === 'navigate' || url.pathname.endsWith('/index.html') || url.pathname === '/' || url.pathname.endsWith('/gold/')){
+    event.respondWith(networkFirst(req));
+    return;
+  }
+
+  if(url.origin === self.location.origin || url.hostname.includes('fonts.googleapis.com') || url.hostname.includes('fonts.gstatic.com')){
+    event.respondWith(staleWhileRevalidate(req));
+  }
 });
