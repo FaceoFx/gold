@@ -132,6 +132,204 @@ button:focus-visible,.csel:focus-visible,.calc-input:focus-visible,.ref-card:foc
   .hdr,.hero,.calc-card,.ktable{border-width:2px}
   .krow::before{width:6px}
 }
+
+/* === Stable professional forecast/chart patch v14 + readability v15 === */
+.chart-source-chip{display:inline-flex;align-items:center;margin-inline-start:5px;padding:2px 7px;border-radius:999px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.045);color:var(--txt3);font-size:9px;font-weight:800;white-space:nowrap}.chart-micro-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}.chart-micro-row span{border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:2px 7px;background:rgba(255,255,255,.04);color:var(--txt2)}.chart-empty-state{height:88px;display:grid;place-items:center;text-align:center;color:var(--txt3);font-size:11px;line-height:1.8;border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.01));border:1px dashed rgba(255,255,255,.09)}
+.forecast-card-v14{position:relative;overflow:hidden;isolation:isolate;border-radius:24px;padding:14px;background:linear-gradient(155deg,rgba(9,20,23,.98),rgba(12,29,32,.96));border:1px solid rgba(255,255,255,.11);box-shadow:0 16px 38px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.06)}.forecast-card-v14:before{content:'';position:absolute;inset:-1px;border-radius:24px;z-index:-2;opacity:.96}.forecast-card-v14.up:before{background:linear-gradient(135deg,rgba(62,230,166,.42),rgba(255,215,122,.13) 50%,rgba(255,255,255,.04))}.forecast-card-v14.dn:before{background:linear-gradient(135deg,rgba(255,111,126,.45),rgba(255,215,122,.13) 50%,rgba(255,255,255,.04))}.forecast-card-v14.neutral:before{background:linear-gradient(135deg,rgba(255,215,122,.28),rgba(255,255,255,.05))}.forecast-card-v14:after{content:'';position:absolute;inset:1px;border-radius:23px;background:radial-gradient(circle at 16% 0%,rgba(255,215,122,.10),transparent 42%),linear-gradient(155deg,rgba(7,17,19,.99),rgba(12,30,33,.98));z-index:-1}.fc14-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}.fc14-title{display:flex;align-items:center;gap:8px;min-width:0}.fc14-icon{width:34px;height:34px;border-radius:15px;display:grid;place-items:center;flex:0 0 auto;font-size:17px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}.forecast-card-v14.up .fc14-icon{color:var(--up);background:rgba(62,230,166,.13);border-color:rgba(62,230,166,.27)}.forecast-card-v14.dn .fc14-icon{color:var(--down);background:rgba(255,111,126,.13);border-color:rgba(255,111,126,.27)}.fc14-name{font-size:12.2px;font-weight:900;color:#fff0bf;line-height:1.25;white-space:nowrap}.fc14-sub{font-size:9.5px;color:var(--txt3);margin-top:2px;white-space:nowrap}.fc14-pill{font-size:10.5px;font-weight:900;border-radius:999px;padding:6px 9px;white-space:nowrap;box-shadow:0 8px 20px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.20)}.fc14-pill.up{background:linear-gradient(135deg,var(--up),#b8ffd9);color:#071114}.fc14-pill.dn{background:linear-gradient(135deg,#ff8591,#b93e4c);color:#fff}.fc14-pill.neutral{background:linear-gradient(135deg,#ffe08a,#b99337);color:#101b1f}.fc14-main{border-radius:19px;padding:13px 12px;text-align:center;border:1px solid rgba(255,255,255,.09);background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(0,0,0,.12));box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}.forecast-card-v14.up .fc14-main{border-color:rgba(62,230,166,.28);background:linear-gradient(145deg,rgba(62,230,166,.15),rgba(0,0,0,.17))}.forecast-card-v14.dn .fc14-main{border-color:rgba(255,111,126,.29);background:linear-gradient(145deg,rgba(255,111,126,.16),rgba(0,0,0,.17))}.fc14-label{font-size:10px;color:var(--txt2);font-weight:800;margin-bottom:4px}.fc14-value{font-family:'IBM Plex Mono',monospace;font-size:30px;font-weight:900;line-height:1;letter-spacing:-1px;text-shadow:0 8px 24px currentColor}.fc14-value span{font-family:'IBM Plex Sans Arabic',sans-serif;font-size:13px;font-weight:900;letter-spacing:0;margin-inline-start:3px}.forecast-card-v14.up .fc14-value{color:var(--up)}.forecast-card-v14.dn .fc14-value{color:var(--down)}.forecast-card-v14.neutral .fc14-value{color:var(--gold-l)}.fc14-target{font-size:10px;color:var(--txt2);line-height:1.7;margin-top:7px}.fc14-prob{display:flex;align-items:center;justify-content:space-between;margin-top:12px;font-size:10.5px;color:var(--txt2);font-weight:800}.fc14-prob strong{font-family:'IBM Plex Mono',monospace;color:#fff;font-size:13px}.fc14-meter{height:8px;margin-top:7px;border-radius:999px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.10);overflow:hidden;box-shadow:inset 0 1px 4px rgba(0,0,0,.32)}.fc14-fill{height:100%;border-radius:999px;box-shadow:0 0 14px currentColor,inset 0 1px 0 rgba(255,255,255,.25);transition:width .4s ease}.forecast-card-v14.up .fc14-fill{background:linear-gradient(90deg,rgba(62,230,166,.42),var(--up));color:var(--up);margin-right:auto}.forecast-card-v14.dn .fc14-fill{background:linear-gradient(90deg,#ff9aa4,var(--down));color:var(--down);margin-left:auto}.forecast-card-v14.neutral .fc14-fill{background:linear-gradient(90deg,rgba(255,215,122,.42),var(--gold-l));color:var(--gold-l)}.fc14-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}.fc14-kpi{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.045);border-radius:15px;padding:8px 9px;min-width:0}.fc14-kpi span{display:block;font-size:9px;color:var(--txt3);margin-bottom:2px;font-weight:800}.fc14-kpi b{display:block;font-size:11px;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fc14-kpi b.up{color:var(--up)}.fc14-kpi b.dn{color:var(--down)}.fc14-reasons{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}.fc14-reasons span{font-size:9px;color:var(--txt2);border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.045);border-radius:999px;padding:3px 7px;line-height:1.45;white-space:nowrap}.fc14-note{font-size:9px;color:var(--txt3);text-align:center;border-top:1px solid rgba(255,255,255,.06);padding-top:8px;margin-top:9px}.fc14-wait{padding:17px 12px}.fc14-wait-title{font-size:14px;font-weight:900;color:var(--gold-l);margin-bottom:5px}.fc14-wait-text{font-size:11px;color:var(--txt2);line-height:1.8}.fc14-skeleton{height:8px;border-radius:999px;margin-top:12px;background:linear-gradient(90deg,rgba(255,215,122,.10),rgba(255,215,122,.42),rgba(255,215,122,.10));background-size:180% 100%;animation:fc14Scan 1.5s ease-in-out infinite}@keyframes fc14Scan{0%{background-position:100% 0}100%{background-position:-80% 0}}.hero-safe-error{margin:0;background:linear-gradient(145deg,rgba(255,111,126,.11),rgba(255,215,122,.055));border:1px solid rgba(255,111,126,.28);border-radius:28px;padding:22px;text-align:center;box-shadow:var(--shadow)}.hero-safe-error b{display:block;color:#ffd2d7;font-size:15px;margin-bottom:8px}.hero-safe-error p{font-size:12px;color:var(--txt2);line-height:1.8;margin-bottom:12px}.hero-safe-error button{border:0;border-radius:16px;background:linear-gradient(135deg,var(--gold-l),var(--gold));color:#101b1f;font-family:'IBM Plex Sans Arabic',sans-serif;font-weight:900;padding:11px 18px;cursor:pointer}@media(max-width:390px){.fc14-value{font-size:26px}.fc14-grid{grid-template-columns:1fr}.fc14-name{font-size:11.5px}.fc14-sub{display:none}.fc14-pill{font-size:9.5px;padding:5px 7px}}
+
+
+/* === Forecast readability patch v15: no clipped Arabic text === */
+.forecast-card-v14{
+  min-width:0!important;
+}
+.fc14-head{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  justify-content:flex-start!important;
+  gap:9px!important;
+  margin-bottom:12px!important;
+}
+.fc14-title{
+  width:100%!important;
+  min-width:0!important;
+  display:flex!important;
+  align-items:flex-start!important;
+  gap:9px!important;
+}
+.fc14-title > div{
+  min-width:0!important;
+  width:100%!important;
+}
+.fc14-name,
+.fc14-sub,
+.fc14-kpi b,
+.fc14-reasons span,
+.fc14-target,
+.fc14-note{
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+}
+.fc14-name{
+  font-size:12.4px!important;
+  line-height:1.45!important;
+  color:#fff0bf!important;
+}
+.fc14-sub{
+  font-size:10px!important;
+  line-height:1.55!important;
+  color:var(--txt3)!important;
+}
+.fc14-pill{
+  align-self:flex-start!important;
+  max-width:100%!important;
+  white-space:normal!important;
+  line-height:1.35!important;
+  text-align:center!important;
+  padding:6px 11px!important;
+  min-height:28px!important;
+}
+.fc14-main{
+  padding:13px 12px!important;
+}
+.fc14-value{
+  font-size:29px!important;
+  line-height:1.12!important;
+}
+.fc14-target{
+  font-size:10.2px!important;
+  line-height:1.8!important;
+  word-break:normal!important;
+}
+.fc14-grid{
+  grid-template-columns:1fr!important;
+  gap:8px!important;
+  margin-top:11px!important;
+}
+.fc14-kpi{
+  display:grid!important;
+  grid-template-columns:auto minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:8px!important;
+  padding:9px 10px!important;
+  min-height:40px!important;
+}
+.fc14-kpi span{
+  margin:0!important;
+  font-size:9.5px!important;
+  line-height:1.45!important;
+}
+.fc14-kpi b{
+  display:block!important;
+  min-width:0!important;
+  font-size:11.2px!important;
+  line-height:1.55!important;
+  text-align:start!important;
+  word-break:normal!important;
+}
+.fc14-reasons{
+  gap:6px!important;
+  margin-top:11px!important;
+}
+.fc14-reasons span{
+  font-size:9.3px!important;
+  line-height:1.5!important;
+  max-width:100%!important;
+}
+.fc14-note{
+  font-size:9.2px!important;
+  line-height:1.65!important;
+}
+@media(max-width:390px){
+  .fc14-sub{display:block!important}
+  .fc14-value{font-size:26px!important}
+  .fc14-pill{font-size:10px!important}
+}
+
+
+
+/* === Restored market session status section + square status card === */
+.market-status-section{margin:0 0 13px;position:relative;z-index:1}
+.market-hours-label{display:flex!important;align-items:center;justify-content:center;gap:6px;text-align:center;margin-bottom:10px!important;line-height:1.6}
+.market-status-card{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.11);background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.025));box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 10px 26px rgba(0,0,0,.16);isolation:isolate}
+.market-status-card::before{content:'';position:absolute;inset:-1px;background:radial-gradient(circle at 96% 12%,rgba(62,230,166,.15),transparent 36%),radial-gradient(circle at 6% 100%,rgba(255,215,122,.10),transparent 42%);pointer-events:none;z-index:-1}
+.market-status-wide{border-radius:18px;padding:13px 14px}
+.market-status-head{display:flex;align-items:center;gap:7px;margin-bottom:7px}
+.market-status-dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex:0 0 auto;box-shadow:0 0 10px currentColor;background:currentColor}
+.market-status-title{font-size:14px;font-weight:800;line-height:1.35}
+.market-status-sub{font-size:12px;color:var(--txt2);margin-bottom:10px;line-height:1.7}
+.market-progress{position:relative;height:5px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden;margin-bottom:7px}
+.market-progress-fill{position:absolute;top:0;right:0;height:100%;border-radius:999px;transition:width .5s ease;background:var(--up)}
+.market-scale{display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--txt3);font-family:'IBM Plex Mono',monospace;margin-bottom:4px;direction:ltr}
+.market-clock{font-size:11px;color:var(--txt3);font-family:'IBM Plex Mono',monospace;direction:ltr;text-align:right}
+.market-countdown{min-width:132px;border:1px solid rgba(255,215,122,.20);background:linear-gradient(145deg,rgba(255,215,122,.12),rgba(62,230,166,.055));border-radius:15px;padding:8px 10px;text-align:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 8px 20px rgba(0,0,0,.16)}
+.market-countdown-label{font-size:9.5px;color:var(--txt3);font-weight:800;margin-bottom:4px;white-space:nowrap}
+.market-countdown-value{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;direction:rtl;font-family:'IBM Plex Mono',monospace}
+.market-countdown-value span{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0}
+.market-countdown-value b{font-size:15px;line-height:1.05;color:#fff0bf;font-weight:900;text-shadow:0 5px 16px rgba(255,215,122,.15)}
+.market-countdown-value small{font-family:'IBM Plex Sans Arabic',sans-serif;font-size:8.5px;line-height:1.3;color:var(--txt2);margin-top:3px;white-space:nowrap}
+.market-status-main{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}
+.market-status-copy{min-width:0;flex:1;text-align:right}
+@media(max-width:390px){.market-status-main{gap:8px}.market-countdown{min-width:118px;padding:7px 7px}.market-countdown-label{font-size:8.8px}.market-countdown-value{gap:3px}.market-countdown-value b{font-size:13px}.market-countdown-value small{font-size:7.5px}}
+.market-status-square{width:100%;aspect-ratio:1/1;border-radius:22px;padding:13px;display:flex;flex-direction:column;justify-content:space-between;gap:9px;margin-top:0;min-height:0}
+.market-status-square .market-status-head{margin:0;align-items:flex-start}
+.market-status-square .market-status-title{font-size:12.5px;line-height:1.45}
+.market-status-square .market-status-sub{font-size:10.5px;line-height:1.65;margin:0;color:var(--txt2)}
+.market-square-time{font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:900;color:#fff0bf;direction:ltr;text-align:center;line-height:1;text-shadow:0 8px 22px rgba(255,215,122,.16)}
+.market-square-day{text-align:center;font-size:10px;color:var(--txt3);margin-top:4px}
+.market-status-square .market-progress{height:7px;margin:0;border:1px solid rgba(255,255,255,.08)}
+.market-status-square .market-scale{font-size:8.5px;margin:0;opacity:.85}
+.market-status-square .market-clock{text-align:center;font-size:9.5px;line-height:1.45}
+@media(max-width:390px){.market-status-title{font-size:13px}.market-status-sub{font-size:11px}.market-status-square{padding:11px;border-radius:20px}.market-square-time{font-size:16px}.market-status-square .market-status-title{font-size:11.5px}.market-status-square .market-status-sub{font-size:9.5px}}
+
+
+
+/* === Market clarity + forecast disclaimer patch v21 === */
+.market-countdown-label{color:#fff!important;text-shadow:0 1px 8px rgba(0,0,0,.45)}
+.market-status-card.market-open{border-color:rgba(62,230,166,.22);background:linear-gradient(145deg,rgba(62,230,166,.075),rgba(255,255,255,.026))}
+.market-status-card.market-open::before{background:radial-gradient(circle at 96% 12%,rgba(62,230,166,.24),transparent 38%),radial-gradient(circle at 8% 100%,rgba(255,215,122,.11),transparent 44%)}
+.market-status-card.market-open .market-status-sub{color:#d9fff0}
+.market-status-card.market-closed{border-color:rgba(255,111,126,.26);background:linear-gradient(145deg,rgba(255,111,126,.075),rgba(255,215,122,.035))}
+.market-status-card.market-closed::before{background:radial-gradient(circle at 96% 12%,rgba(255,111,126,.23),transparent 38%),radial-gradient(circle at 8% 100%,rgba(255,215,122,.13),transparent 44%)}
+.market-status-card.market-closed .market-status-sub{color:#ffd2d7}
+.market-status-card.market-closed .market-countdown{border-color:rgba(255,111,126,.28);background:linear-gradient(145deg,rgba(255,111,126,.13),rgba(255,215,122,.055))}
+.market-status-card.market-closed .market-progress-fill{background:linear-gradient(90deg,rgba(255,111,126,.35),rgba(255,215,122,.28))!important}
+.fc14-disclaimer{grid-column:1/-1;font-size:9.5px;color:#fff0bf;text-align:center;border-top:1px solid rgba(255,255,255,.07);padding-top:8px;margin-top:8px;line-height:1.6;opacity:.92}
+
+/* === Layout patch v20: 30s refresh + update/date row + full-width 24h forecast === */
+.hero-bottom-wrap{display:flex;flex-direction:column;gap:11px;margin-top:10px}
+.hero-meta-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(155px,190px);gap:10px;align-items:stretch;direction:rtl}
+.hero-meta-text{min-width:0;display:flex;flex-direction:column;justify-content:center;gap:7px;text-align:right;direction:rtl}
+.hero-meta-text .hero-badges{margin:0!important;justify-content:flex-start!important;gap:7px}
+.hero-meta-text .hero-date{margin:0!important;line-height:1.55;white-space:normal}
+.hero-meta-row .timer-ring-compact{margin-top:0!important;height:100%;min-height:76px;padding:10px 11px;align-self:stretch}
+.hero-meta-row .ring-compact{width:44px;height:44px;border-radius:15px}
+.hero-meta-row .ring-compact-title{font-size:11.2px}.hero-meta-row .ring-compact-sub{font-size:10px}.hero-meta-row .ring-compact-updated{font-size:9px}
+.hero-forecast-row{width:100%;min-width:0}
+.hero-forecast-row .forecast-card-v14{width:100%;margin:0!important}
+.hero-forecast-row .forecast-card-v14:not(.neutral){display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:10px;align-items:stretch}
+.hero-forecast-row .forecast-card-v14:not(.neutral) .fc14-head{grid-column:1/-1;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;margin-bottom:0!important}
+.hero-forecast-row .forecast-card-v14:not(.neutral) .fc14-title{width:auto!important;align-items:center!important}
+.hero-forecast-row .forecast-card-v14:not(.neutral) .fc14-title>div{width:auto!important}
+.hero-forecast-row .forecast-card-v14:not(.neutral) .fc14-pill{align-self:center!important;white-space:nowrap!important}
+.hero-forecast-row .forecast-card-v14:not(.neutral) .fc14-main{grid-column:1;grid-row:2 / span 3;margin:0;display:flex;flex-direction:column;justify-content:center;min-height:112px}
+.hero-forecast-row .forecast-card-v14:not(.neutral) .fc14-prob{grid-column:2;grid-row:2;margin-top:3px}
+.hero-forecast-row .forecast-card-v14:not(.neutral) .fc14-meter{grid-column:2;grid-row:3;margin-top:0}
+.hero-forecast-row .forecast-card-v14:not(.neutral) .fc14-reasons{grid-column:2;grid-row:4;margin-top:2px;align-content:start}
+.hero-forecast-row .forecast-card-v14:not(.neutral) .fc14-disclaimer{grid-column:1/-1;margin-top:0}
+@media(max-width:390px){
+  .hero-meta-row{grid-template-columns:minmax(0,1fr) minmax(145px,170px);gap:8px}
+  .hero-meta-row .timer-ring-compact{padding:9px 9px;gap:8px;min-height:72px}
+  .hero-meta-row .ring-compact{width:40px;height:40px;border-radius:14px}
+  .hero-meta-text .hero-badges .badge{font-size:10.5px;padding:6px 8px}
+  .hero-meta-text .hero-date{font-size:10.8px}
+  .hero-forecast-row .forecast-card-v14:not(.neutral){grid-template-columns:1fr;gap:9px}
+  .hero-forecast-row .forecast-card-v14:not(.neutral) .fc14-head,.hero-forecast-row .forecast-card-v14:not(.neutral) .fc14-main,.hero-forecast-row .forecast-card-v14:not(.neutral) .fc14-prob,.hero-forecast-row .forecast-card-v14:not(.neutral) .fc14-meter,.hero-forecast-row .forecast-card-v14:not(.neutral) .fc14-reasons,.hero-forecast-row .forecast-card-v14:not(.neutral) .fc14-disclaimer{grid-column:1;grid-row:auto}
+  .hero-forecast-row .forecast-card-v14:not(.neutral) .fc14-main{min-height:0}
+}
+@media(max-width:340px){.hero-meta-row{grid-template-columns:1fr}.hero-meta-row .timer-ring-compact{min-height:0}.hero-meta-text .hero-badges{justify-content:center!important}.hero-meta-text{text-align:center}}
+
 </style>
 </head>
 
@@ -144,7 +342,7 @@ button:focus-visible,.csel:focus-visible,.calc-input:focus-visible,.ref-card:foc
         <div class="hdr-logo"><svg width="28" height="28" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="coinGrad" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="#fff6bf"/><stop offset="40%" stop-color="#f0c554"/><stop offset="100%" stop-color="#93670f"/></radialGradient><filter id="coinShadow"><feDropShadow dx="0" dy="1" stdDeviation="1" flood-opacity="0.3"/></filter></defs><circle cx="50" cy="50" r="45" fill="url(#coinGrad)" filter="url(#coinShadow)" stroke="#b8860b" stroke-width="2"/><circle cx="50" cy="50" r="38" fill="none" stroke="#ffd700" stroke-width="1" opacity="0.6"/><text x="50" y="70" font-size="72" font-weight="900" fill="#4a3a00" text-anchor="middle" font-family="serif" style="text-shadow: 0 2px 0 rgba(255,255,255,0.5), 0 3px 4px rgba(0,0,0,0.3)">$</text><circle cx="35" cy="30" r="8" fill="white" opacity="0.3"/></svg></div>
         <div class="hdr-titles">
           <div class="hdr-title">بورصة الذهب بالمنطقة الشرقية</div>
-          <div class="hdr-sub">تحديث تلقائي كل 60 ثانية · بث مباشر</div>
+          <div class="hdr-sub">تحديث تلقائي كل 30 ثانية · بث مباشر</div>
         </div>
       </div>
       <div class="live-pill"><span class="pulse"></span><span id="liveText">مباشر</span></div>
@@ -295,7 +493,7 @@ button:focus-visible,.csel:focus-visible,.calc-input:focus-visible,.ref-card:foc
     <div class="notes">
       <b>المصنعية</b> — تتراوح بين 10 و20 ريال للجرام حسب المحل.<br>
       <b>الآلة الحاسبة</b> — أدخل العيار والمصنعية وعدد الجرامات للحصول على السعر الإجمالي .<br>
-      <b>مواعيد البورصة</b> — تفتح الاثنين 1:00 ص وتغلق الجمعة 12:00 م · عطلة السبت والأحد.<br>
+      <b>مواعيد البورصة</b> — تفتح الاثنين 1:00 ص وتغلق الجمعة 12:00 ص · عطلة السبت والأحد.<br>
       <b>المقارنة اليومية</b> — نسبة التغيير محسوبة مقارنةً بسعر إغلاق الجلسة السابقة.
     </div>
 
@@ -325,7 +523,7 @@ button:focus-visible,.csel:focus-visible,.calc-input:focus-visible,.ref-card:foc
 
 <script>
 const OZ = 31.1034768;
-const REFRESH_SEC = 60;
+const REFRESH_SEC = 30;
 const CHART_HOURS = 48;
 
 const KARATS = [
@@ -565,8 +763,10 @@ function buildSyntheticHistory(current){
     const wave2 = Math.sin(ratio * Math.PI * 8) * volatility * 0.3;
     const wave3 = Math.sin(ratio * Math.PI * 12) * volatility * 0.2;
     
-    // Random walk component
-    const noise = (Math.random() - 0.5) * volatility * 0.4;
+    // Deterministic micro-variation (no random numbers, stable after refresh)
+    const seedWave = Math.sin((i + 1) * 12.9898 + Math.round(current) * 0.017) * 43758.5453;
+    const seedFrac = seedWave - Math.floor(seedWave);
+    const noise = (seedFrac - 0.5) * volatility * 0.4;
     
     // Trend component - gradual move toward current price
     const trendMove = trend * ratio;
@@ -811,11 +1011,11 @@ async function calculatePrediction(){
   // === ASYMMETRIC RANGES ===
   const baseVolatility = volatilityPct / 100;
   
-  // IMPORTANT: Add minimum bias to avoid 50/50 (looks fake to users!)
-  // If forecast is too neutral, add slight random bias
+  // IMPORTANT: Add minimum deterministic bias to avoid unstable 50/50 output
+  // If forecast is too neutral, use recent price action as a deterministic bias
   let adjustedForecast = forecastPct;
   if(Math.abs(forecastPct) < 0.15){
-    // Too neutral, add slight bias based on recent price action
+    // Too neutral, add deterministic bias based on recent price action
     const recentBias = S.goldChangePct > 0 ? 0.2 : -0.2;
     adjustedForecast = recentBias;
   }
@@ -1552,6 +1752,756 @@ function checkFirebaseSave(){
     lastFirebaseSave = now;
   }
 }
+
+
+/* === Stable professional data pipeline v14 ===
+   Restores the app to a safe single-source flow:
+   - Price renders immediately from saved/live data.
+   - Chart and forecast use the same history array.
+   - No random/synthetic chart data.
+   - Forecast never blocks price rendering and never shows both up/down ranges.
+*/
+const V14_CHART_CACHE = '_goldChartCacheV14';
+const V14_FORECAST_CACHE = '_goldForecastStableV14';
+const V22_FORECAST_CACHE = '_goldForecastLockedV22';
+const V22_FORECAST_LOCK_MS = 15 * 60 * 1000;
+const V22_FORECAST_MAX_STALE_MS = 60 * 60 * 1000;
+const V22_FORECAST_SIGNIFICANT_PRICE_MOVE = 0.0018; // 0.18% XAU move
+S.isRefreshing = false;
+S.remoteHistoryBusy = false;
+S.historyQuality = 'none';
+S.chartSource = '—';
+
+function v14Clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+function v14WithTimeout(promise, ms, fallback=null){
+  return new Promise(resolve => {
+    let done = false;
+    const timer = setTimeout(() => { if(!done){ done = true; resolve(fallback); } }, ms);
+    Promise.resolve(promise).then(v => { if(!done){ done = true; clearTimeout(timer); resolve(v); } }).catch(() => { if(!done){ done = true; clearTimeout(timer); resolve(fallback); } });
+  });
+}
+
+async function tryFetch(url, ms){
+  try{
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), ms || 7000);
+    const r = await fetch(url, { signal:controller.signal, cache:'no-store' });
+    clearTimeout(timer);
+    if(!r.ok) return null;
+    return await r.json();
+  }catch(_){ return null; }
+}
+
+async function fetchGoldPrice(){
+  const goldP = v14WithTimeout(tryFetch('https://api.gold-api.com/price/XAU', 6200), 6600, null);
+  const silverP = v14WithTimeout(tryFetch('https://api.gold-api.com/price/XAG', 5200), 5600, null);
+  const cgP = v14WithTimeout(tryFetch('https://api.coingecko.com/api/v3/simple/price?ids=pax-gold&vs_currencies=usd&include_24hr_change=true', 6200), 6600, null);
+  const [goldApi, silverApi, cg] = await Promise.all([goldP, silverP, cgP]);
+
+  let price = parsePrice(goldApi);
+  let src = 'gold-api.com';
+  let pct = null;
+  let change = null;
+  if(!price && cg?.['pax-gold']?.usd){
+    price = +cg['pax-gold'].usd;
+    pct = +cg['pax-gold'].usd_24h_change || 0;
+    change = price - price / (1 + pct / 100);
+    src = 'CoinGecko PAXG';
+  }
+  if(!price || price < 100) return null;
+
+  const silver = parsePrice(silverApi);
+  let ref = parseFloat(localStorage.getItem('_gpClose') || '0');
+  let refTs = parseInt(localStorage.getItem('_gpCloseTs') || '0');
+  const now = Date.now();
+  const sixHours = 6 * 60 * 60 * 1000;
+  const savedLast = parseFloat(localStorage.getItem('_gp') || '0');
+  if(!ref || ref < 100 || now - refTs > sixHours){
+    ref = savedLast > 100 ? savedLast : price;
+    localStorage.setItem('_gpClose', String(ref));
+    localStorage.setItem('_gpCloseTs', String(now));
+  }
+  if(change === null){
+    change = price - ref;
+    pct = ref > 0 ? (change / ref) * 100 : 0;
+  }
+  return { gold:price, silver:silver || null, change, changePct:pct || 0, src };
+}
+
+async function fetchFxRates(){
+  const er = await v14WithTimeout(tryFetch('https://open.er-api.com/v6/latest/USD', 4500), 5000, null);
+  if(er?.rates) return er.rates;
+  const jsd = await v14WithTimeout(tryFetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json', 4500), 5000, null);
+  if(jsd?.usd){
+    const out = {};
+    for(const [k,v] of Object.entries(jsd.usd)) out[k.toUpperCase()] = v;
+    return out;
+  }
+  return null;
+}
+
+function saveLocalHistory(price){
+  if(!price || price < 100) return;
+  const now = Date.now();
+  let arr = [];
+  try{ arr = JSON.parse(localStorage.getItem('_goldHistory') || '[]'); }catch(_){ arr = []; }
+  arr.push({ t:now, p:price, local:true });
+  const minTime = now - 49 * 60 * 60 * 1000;
+  arr = arr.filter(x => x && x.t >= minTime && x.p > 100).sort((a,b) => a.t - b.t);
+  const compact = [];
+  for(const item of arr){
+    const last = compact[compact.length - 1];
+    if(!last || item.t - last.t >= 60 * 1000) compact.push(item);
+    else last.p = item.p;
+  }
+  localStorage.setItem('_goldHistory', JSON.stringify(compact.slice(-400)));
+}
+
+function getLocalHistory(){
+  let arr = [];
+  try{ arr = JSON.parse(localStorage.getItem('_goldHistory') || '[]'); }catch(_){ arr = []; }
+  const minTime = Date.now() - CHART_HOURS * 60 * 60 * 1000;
+  return arr.filter(x => x && x.t >= minTime && x.p > 100).sort((a,b) => a.t - b.t).map(x => ({...x, local:true}));
+}
+
+function mergeHistoryPoints(points){
+  const sorted = (points || []).filter(x => x && x.t && x.p > 100 && !Number.isNaN(x.p)).sort((a,b) => a.t - b.t);
+  const bucketMs = 3 * 60 * 1000;
+  const map = new Map();
+  for(const x of sorted){
+    const key = Math.round(x.t / bucketMs);
+    const old = map.get(key);
+    if(!old || x.live || x.t > old.t) map.set(key, x);
+  }
+  return [...map.values()].sort((a,b) => a.t - b.t);
+}
+
+function saveChartCache(data, source){
+  try{
+    const clean = (data || []).filter(x => x && x.t && x.p > 100).slice(-420).map(x => ({t:x.t,p:x.p,real:!!x.real,live:!!x.live}));
+    if(clean.length >= 8){
+      localStorage.setItem(V14_CHART_CACHE, JSON.stringify({ts:Date.now(), source:source || 'بيانات سوق', data:clean}));
+    }
+  }catch(_){ }
+}
+
+function getChartCache(){
+  try{
+    const c = JSON.parse(localStorage.getItem(V14_CHART_CACHE) || 'null');
+    if(!c || !Array.isArray(c.data)) return null;
+    if(Date.now() - (c.ts || 0) > 12 * 60 * 60 * 1000) return null;
+    const cutoff = Date.now() - CHART_HOURS * 60 * 60 * 1000;
+    const data = c.data.filter(x => x && x.t >= cutoff && x.p > 100).sort((a,b) => a.t - b.t).map(x => ({...x,cached:true,real:true}));
+    if(data.length < 8) return null;
+    return { data, source:c.source || 'بيانات سوق محفوظة' };
+  }catch(_){ return null; }
+}
+
+function parseYahooChartPayload(j){
+  const r = j?.chart?.result?.[0];
+  const ts = r?.timestamp || [];
+  const quote = r?.indicators?.quote?.[0] || {};
+  const close = quote.close || r?.indicators?.adjclose?.[0]?.adjclose || [];
+  if(!ts.length || !close.length) return [];
+  return ts.map((t,i)=>({t:t*1000,p:typeof close[i] === 'number' ? close[i] : parseFloat(close[i]),real:true}))
+    .filter(x => x.t && x.p > 100 && !Number.isNaN(x.p)).sort((a,b)=>a.t-b.t);
+}
+
+async function fetchYahooChartFast(symbol){
+  const direct = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=5d&interval=15m&includePrePost=true`;
+  const urls = [
+    direct,
+    'https://corsproxy.io/?' + encodeURIComponent(direct),
+    'https://api.allorigins.win/raw?url=' + encodeURIComponent(direct)
+  ];
+  const attempts = urls.map(url => v14WithTimeout(tryFetch(url, 4200), 4600, null).then(j => {
+    const data = parseYahooChartPayload(j);
+    if(data.length >= 8) return data;
+    return null;
+  }));
+  const results = await Promise.all(attempts);
+  return results.find(x => x && x.length >= 8) || [];
+}
+
+async function refreshRemoteHistoryInBackground(){
+  if(S.remoteHistoryBusy || !S.gold) return;
+  S.remoteHistoryBusy = true;
+  try{
+    let data = await fetchYahooChartFast('XAUUSD=X');
+    let source = 'Yahoo XAU/USD';
+    if(data.length < 8){ data = await fetchYahooChartFast('GC=F'); source = 'Yahoo Futures'; }
+    const cutoff = Date.now() - CHART_HOURS * 60 * 60 * 1000;
+    data = data.filter(x => x.t >= cutoff);
+    if(data.length >= 8){
+      const last = data[data.length - 1].p;
+      if(last && Math.abs(S.gold - last) / S.gold < 0.08){
+        const offset = S.gold - last;
+        data = data.map(x => ({...x, p:x.p + offset, real:true}));
+      }
+      data.push({t:Date.now(), p:S.gold, live:true, real:true});
+      const local = getLocalHistory();
+      S.history = mergeHistoryPoints([...data, ...local]).filter(x => x.t >= cutoff);
+      S.chartSource = source;
+      S.historyQuality = 'market';
+      saveChartCache(S.history, source);
+      if(S.initialized) renderAll();
+    }
+  }catch(_){
+  }finally{ S.remoteHistoryBusy = false; }
+}
+
+async function updateHistory(){
+  const cutoff = Date.now() - CHART_HOURS * 60 * 60 * 1000;
+  const local = getLocalHistory();
+  const cached = getChartCache();
+  if(cached){
+    S.history = mergeHistoryPoints([...cached.data, ...local]).filter(x => x.t >= cutoff);
+    S.chartSource = cached.source.includes('محفوظة') ? cached.source : `${cached.source} محفوظة`;
+    S.historyQuality = 'cached_market';
+  }else if(local.length >= 2){
+    S.history = local.filter(x => x.t >= cutoff);
+    S.chartSource = 'بيانات محلية';
+    S.historyQuality = local.length >= 8 ? 'local' : 'limited';
+  }else if(S.gold){
+    S.history = [{t:Date.now(), p:S.gold, local:true, live:true}];
+    S.chartSource = 'جاري جمع البيانات';
+    S.historyQuality = 'insufficient';
+  }else{
+    S.history = [];
+    S.chartSource = '—';
+    S.historyQuality = 'none';
+  }
+  setTimeout(refreshRemoteHistoryInBackground, 250);
+}
+
+function ema(values, period){
+  if(!values.length) return 0;
+  const k = 2 / (period + 1);
+  let out = values[0];
+  for(let i=1;i<values.length;i++) out = values[i] * k + out * (1 - k);
+  return out;
+}
+
+function calcRSI(values, period=14){
+  if(values.length <= period) return 50;
+  let gains=0, losses=0;
+  for(let i=values.length-period;i<values.length;i++){
+    const ch = values[i] - values[i-1];
+    if(ch >= 0) gains += ch; else losses -= ch;
+  }
+  const avgLoss = losses / period;
+  if(avgLoss === 0) return 70;
+  const rs = (gains / period) / avgLoss;
+  return 100 - (100 / (1 + rs));
+}
+
+function historySpanMs(){
+  const h = S.history || [];
+  if(h.length < 2) return 0;
+  return h[h.length-1].t - h[0].t;
+}
+
+function realizedMovePctFromHistory(prices){
+  if(!prices || prices.length < 3) return 0.0025;
+  const last = prices[prices.length-1];
+  const sample = prices.slice(-96);
+  const hi = Math.max(...sample), lo = Math.min(...sample);
+  const rangePct = last ? (hi - lo) / last : 0;
+  return v14Clamp(Math.max(rangePct * 0.42, 0.0018), 0.0015, 0.012);
+}
+
+function calculatePrediction(){
+  if(!S.gold) return null;
+  const h = (S.history || []).filter(x => x && x.p > 100).sort((a,b)=>a.t-b.t);
+  const prices = h.map(x => x.p);
+  const span = historySpanMs();
+  const enough = prices.length >= 8 && span >= 45 * 60 * 1000;
+  const current21 = gramPrice(S.gold, 'SAR', 21/24);
+  const now = Date.now();
+
+  function makeForecast(direction, expectedSARNum, probability, score, dataLabel, reasons, held=false){
+    const safeExpected = Math.max(0, Number(expectedSARNum) || 0);
+    const isUp = direction === 'up';
+    const isNeutral = direction === 'neutral';
+    const signedMovePct = isNeutral || !current21 ? 0 : (isUp ? 1 : -1) * (safeExpected / current21);
+    const target21 = current21 * (1 + signedMovePct);
+    const targetXau = S.gold * (1 + signedMovePct);
+    let reasonList = Array.isArray(reasons) ? reasons.filter(Boolean).slice(0,4) : [];
+    if(held){
+      reasonList = reasonList.filter(r => !/مثبت|مستقر/.test(r)).slice(0,3);
+      reasonList.push('مثبت 15د');
+    }
+    return {
+      direction,
+      directionAr:isNeutral ? 'محايد' : isUp ? 'صعود متوقع' : 'هبوط متوقع',
+      arrow:isNeutral ? '◆' : isUp ? '▲' : '▼',
+      sign:isNeutral ? '' : isUp ? '+' : '-',
+      expectedSAR:isNeutral ? '0.00' : safeExpected.toFixed(2),
+      target21:target21.toFixed(2),
+      targetXau:targetXau.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}),
+      probability:Math.round(v14Clamp(Number(probability) || 50, 0, 95)),
+      score:Number(score) || 0,
+      dataLabel:dataLabel || (S.chartSource || 'بيانات حقيقية'),
+      reasons:reasonList,
+      stable:held
+    };
+  }
+
+  if(!enough){
+    return { direction:'neutral', directionAr:'تجميع بيانات', arrow:'◆', sign:'', expectedSAR:'—', target21:current21.toFixed(2), targetXau:S.gold.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}), probability:0, dataLabel:'بيانات غير كافية', reasons:['انتظار تاريخ سعر حقيقي','لا يوجد توقع قبل اكتمال البيانات'] };
+  }
+
+  const last = prices[prices.length-1];
+  const first = prices[0];
+  const p1h = prices[Math.max(0, prices.length-5)] || first;
+  const p4h = prices[Math.max(0, prices.length-17)] || first;
+  const ema8 = ema(prices, Math.min(8, prices.length));
+  const ema21 = ema(prices, Math.min(21, prices.length));
+  const rsi = calcRSI(prices, Math.min(14, Math.max(3, prices.length-1)));
+
+  const trend = v14Clamp(((ema8 - ema21) / last) / 0.0025, -1, 1);
+  const mom1h = v14Clamp(((last - p1h) / p1h) / 0.0035, -1, 1);
+  const mom4h = v14Clamp(((last - p4h) / p4h) / 0.0075, -1, 1);
+  const session = v14Clamp(((last - first) / first) / 0.012, -1, 1);
+  let rsiSig = 0;
+  if(rsi > 72) rsiSig = -0.55;
+  else if(rsi < 28) rsiSig = 0.55;
+  else rsiSig = v14Clamp((rsi - 50) / 50, -0.35, 0.35);
+
+  let score = trend*0.34 + mom1h*0.20 + mom4h*0.22 + session*0.16 + rsiSig*0.08;
+  score = v14Clamp(score, -1, 1);
+
+  const dataLabel = S.historyQuality === 'market' ? 'بيانات سوق مباشرة' : S.historyQuality === 'cached_market' ? 'بيانات سوق محفوظة' : 'بيانات محلية';
+
+  if(Math.abs(score) < 0.13){
+    return makeForecast('neutral', 0, 50, score, dataLabel, ['الإشارة ضعيفة','لا يوجد اتجاه واضح',`RSI ${Math.round(rsi)}`], false);
+  }
+
+  let direction = score > 0 ? 'up' : 'dn';
+  let rawProbability = Math.round(v14Clamp(55 + Math.abs(score) * 34, 55, S.historyQuality === 'market' ? 86 : 76));
+  const movePct = realizedMovePctFromHistory(prices);
+  let targetPct = (direction === 'up' ? 1 : -1) * movePct * v14Clamp(0.55 + Math.abs(score) * 0.55, 0.45, 1.05);
+  let rawExpectedSAR = Math.abs((current21 * (1 + targetPct)) - current21);
+
+  const reasons = [];
+  reasons.push(trend >= 0 ? 'المتوسطات: شراء' : 'المتوسطات: بيع');
+  reasons.push((mom1h+mom4h) >= 0 ? 'الزخم: صاعد' : 'الزخم: هابط');
+  reasons.push(`RSI ${Math.round(rsi)}`);
+  if(S.historyQuality !== 'market') reasons.push('إشارة محافظة');
+
+  let prev = null;
+  try{ prev = JSON.parse(localStorage.getItem(V22_FORECAST_CACHE) || 'null'); }catch(_){ prev = null; }
+
+  if(prev && prev.direction && prev.direction !== 'neutral'){
+    const age = now - (prev.ts || 0);
+    const prevExpected = Number(prev.expectedSAR) || 0;
+    const prevProbability = Number(prev.probability) || rawProbability;
+    const prevScoreAbs = Math.abs(Number(prev.score) || 0);
+    const priceMove = prev.baseGold ? Math.abs(S.gold - prev.baseGold) / prev.baseGold : 1;
+    const expectedDiff = Math.abs(rawExpectedSAR - prevExpected);
+    const probabilityDiff = Math.abs(rawProbability - prevProbability);
+    const strongDirectionChange = prev.direction !== direction && Math.abs(score) >= Math.max(0.45, prevScoreAbs + 0.18);
+
+    // Lock the visible number for 15 minutes unless the market has moved materially.
+    // This makes reloads and 30-second refreshes stable while still allowing real changes through.
+    if(age >= 0 && age < V22_FORECAST_LOCK_MS && priceMove < V22_FORECAST_SIGNIFICANT_PRICE_MOVE && expectedDiff < 0.40 && probabilityDiff < 8 && !strongDirectionChange){
+      return makeForecast(prev.direction, prevExpected, prevProbability, prev.score || score, prev.dataLabel || dataLabel, prev.reasons || reasons, true);
+    }
+
+    // Do not flip direction on a weak opposite tick.
+    if(prev.direction !== direction && !strongDirectionChange && age < 30 * 60 * 1000){
+      direction = prev.direction;
+      score = (direction === 'up' ? 1 : -1) * Math.max(0.18, Math.min(prevScoreAbs * 0.80, Math.abs(score)));
+      targetPct = (direction === 'up' ? 1 : -1) * movePct * v14Clamp(0.55 + Math.abs(score) * 0.55, 0.45, 1.05);
+      rawExpectedSAR = Math.abs((current21 * (1 + targetPct)) - current21);
+    }
+
+    // Smooth the displayed amount between forecast windows instead of jumping every refresh.
+    if(prev.direction === direction && age >= 0 && age < V22_FORECAST_MAX_STALE_MS && prevExpected > 0){
+      const smoothedExpected = prevExpected * 0.70 + rawExpectedSAR * 0.30;
+      rawExpectedSAR = prevExpected + v14Clamp(smoothedExpected - prevExpected, -0.55, 0.55);
+      rawProbability = Math.round(prevProbability * 0.65 + rawProbability * 0.35);
+    }
+  }
+
+  rawExpectedSAR = Math.max(0.05, rawExpectedSAR);
+  rawProbability = Math.round(v14Clamp(rawProbability, 55, S.historyQuality === 'market' ? 86 : 76));
+
+  const out = makeForecast(direction, rawExpectedSAR, rawProbability, score, dataLabel, reasons, false);
+  try{
+    localStorage.setItem(V22_FORECAST_CACHE, JSON.stringify({
+      ts:now,
+      baseGold:S.gold,
+      direction:out.direction,
+      expectedSAR:Number(out.expectedSAR) || 0,
+      probability:out.probability,
+      score:out.score,
+      dataLabel:out.dataLabel,
+      reasons:out.reasons
+    }));
+  }catch(_){ }
+  return out;
+}
+
+function renderForecastCard(pred){
+  if(!pred) return '<div></div>';
+  if(pred.direction === 'neutral' && pred.probability === 0){
+    return `<div class="forecast-card-v14 neutral">
+      <div class="fc14-head"><div class="fc14-title"><span class="fc14-icon">📊</span><div><div class="fc14-name">مؤشر 24 ساعة القادمة</div><div class="fc14-sub">لا يتم إصدار توقع بدون بيانات كافية</div></div></div><span class="fc14-pill neutral">تجميع بيانات</span></div>
+      <div class="fc14-main fc14-wait"><div class="fc14-wait-title">جاري بناء قراءة حقيقية</div><div class="fc14-wait-text">سيظهر الاتجاه بعد توفر حركة سعر كافية من السوق أو من سجل الأسعار المحلي.</div><div class="fc14-skeleton"></div></div>
+      <div class="fc14-reasons">${pred.reasons.map(r=>`<span>${r}</span>`).join('')}</div>
+      <div class="fc14-note">لا يتم استخدام رسم أو توقع عشوائي.</div>
+      <div class="fc14-disclaimer">توقع تحليلي وليس توصية شراء أو بيع.</div>
+    </div>`;
+  }
+  const cls = pred.direction;
+  return `<div class="forecast-card-v14 ${cls}">
+    <div class="fc14-head"><div class="fc14-title"><span class="fc14-icon">${cls==='up'?'↗':'↘'}</span><div><div class="fc14-name">مؤشر 24 ساعة القادمة</div><div class="fc14-sub">توقع اتجاه واحد حسب حركة السعر</div></div></div><span class="fc14-pill ${cls}">${pred.arrow} ${pred.directionAr}</span></div>
+    <div class="fc14-main"><div class="fc14-label">التغير المتوقع لجرام 21</div><div class="fc14-value">${pred.sign}${pred.expectedSAR}<span>ر.س</span></div><div class="fc14-target">الهدف ${pred.target21} ر.س · XAU ${pred.targetXau}$</div></div>
+    <div class="fc14-prob"><span>نسبة التوقع</span><strong>${pred.probability}%</strong></div>
+    <div class="fc14-meter"><div class="fc14-fill" style="width:${pred.probability}%"></div></div>
+    <div class="fc14-reasons">${pred.reasons.map(r=>`<span>${r}</span>`).join('')}</div>
+    <div class="fc14-disclaimer">توقع تحليلي وليس توصية شراء أو بيع.</div>
+  </div>`;
+}
+
+function getChartStats(cur){
+  const h = (S.history || []).filter(x => x && x.p > 100);
+  if(!h.length) return {high:'—', low:'—', source:S.chartSource || '—', changeLabel:'—'};
+  const prices = h.map(x => x.p);
+  const hi = Math.max(...prices), lo = Math.min(...prices);
+  const first = prices[0], last = prices[prices.length-1];
+  const diff = first ? ((last - first) / first) * 100 : 0;
+  return {
+    high:hi.toLocaleString('en-US',{maximumFractionDigits:0}),
+    low:lo.toLocaleString('en-US',{maximumFractionDigits:0}),
+    source:S.chartSource || '—',
+    changeLabel:(diff >= 0 ? '+' : '') + diff.toFixed(2) + '% خلال الرسم'
+  };
+}
+
+function getChartDiff(){
+  const h = (S.history || []).filter(x => x && x.p > 100);
+  if(h.length >= 2){
+    const first = h[0].p, last = h[h.length-1].p;
+    const diff = last - first;
+    return {diff, pct:first ? diff / first * 100 : 0};
+  }
+  return {diff:S.goldChange || 0, pct:S.goldChangePct || 0};
+}
+
+
+
+function splitSessionMinutes(totalMin){
+  const safe = Math.max(0, Math.floor(totalMin));
+  return {
+    days: Math.floor(safe / 1440),
+    hours: Math.floor((safe % 1440) / 60),
+    minutes: safe % 60
+  };
+}
+
+function formatSessionRemaining(parts, includeMinutes){
+  const out = [];
+  if(parts.days > 0) out.push(`${parts.days} يوم`);
+  if(parts.hours > 0 || parts.days > 0) out.push(`${parts.hours} ساعة`);
+  if(includeMinutes !== false) out.push(`${parts.minutes} دقيقة`);
+  return out.join(' و ');
+}
+
+function getSaudiMarketStatus(){
+  const saNow = new Date(new Date().toLocaleString('en-US', {timeZone:'Asia/Riyadh'}));
+  const saH = saNow.getHours();
+  const saM = saNow.getMinutes();
+  const saDay = saNow.getDay();
+  const nowMin = saH * 60 + saM;
+  const weekMin = saDay * 1440 + nowMin;
+  const weekOpen = 1 * 1440 + 60;       // Monday 01:00
+  const weekClose = 5 * 1440;           // Friday 00:00 (end of Thursday session)
+  const isOpen = weekMin >= weekOpen && weekMin < weekClose;
+  const dayNames = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  const dayAr = dayNames[saDay];
+  const time12 = saNow.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:true});
+  const timeAr = saNow.toLocaleTimeString('ar-SA', {hour:'2-digit', minute:'2-digit'});
+  const daySessionPct = isOpen ? Math.min(100, Math.max(0, ((nowMin - 60) / (24*60 - 60)) * 100)) : (weekMin < weekOpen ? 0 : 100);
+  const statusColor = isOpen ? 'var(--up)' : 'var(--down)';
+  const statusText = isOpen ? 'بورصة الذهب مفتوحة' : 'البورصة مغلقة';
+  const nextCloseMin = weekMin < weekClose ? (weekClose - weekMin) : ((7 * 1440 - weekMin) + weekClose);
+  const closeCountdown = splitSessionMinutes(nextCloseMin);
+  const nextOpenMin = weekMin < weekOpen ? weekOpen - weekMin : (7*1440 - weekMin) + weekOpen;
+  const openCountdown = splitSessionMinutes(nextOpenMin);
+  const countdownParts = isOpen ? closeCountdown : openCountdown;
+  const countdownLabel = isOpen ? 'باقي على الإغلاق' : 'باقي على الافتتاح';
+  const subText = isOpen
+    ? `سيتم إغلاقها بعد ${formatSessionRemaining(closeCountdown)}`
+    : `تفتح بعد ${formatSessionRemaining(openCountdown)}`;
+  const cardClass = isOpen ? 'market-open' : 'market-closed';
+  return {isOpen, statusColor, statusText, subText, pct:daySessionPct, dayAr, time12, timeAr, closeCountdown, openCountdown, countdownParts, countdownLabel, cardClass};
+}
+
+function renderMarketStatusCard(mode){
+  const m = getSaudiMarketStatus();
+  const fill = m.isOpen ? 'var(--up)' : 'rgba(255,111,126,.45)';
+  const statusTop = `
+    <div class="market-status-head">
+      <span class="market-status-dot" style="color:${m.statusColor}"></span>
+      <span class="market-status-title" style="color:${m.statusColor}">${m.statusText}</span>
+    </div>
+    <div class="market-status-sub">${m.subText}</div>`;
+  const progressPart = `
+    <div class="market-progress"><div class="market-progress-fill" style="width:${m.pct.toFixed(1)}%;background:${fill}"></div></div>
+    <div class="market-scale"><span>01:00 AM</span><span>${m.dayAr}</span><span>12:00 AM</span></div>
+    <div class="market-clock">السعودية (UTC+3) · ${m.time12}</div>`;
+  const countdown = `
+    <div class="market-countdown" aria-label="${m.countdownLabel}">
+      <div class="market-countdown-label">${m.countdownLabel}</div>
+      <div class="market-countdown-value">
+        <span><b>${m.countdownParts.days}</b><small>يوم</small></span>
+        <span><b>${m.countdownParts.hours}</b><small>ساعة</small></span>
+        <span><b>${m.countdownParts.minutes}</b><small>دقيقة</small></span>
+      </div>
+    </div>`;
+  if(mode === 'square'){
+    return `<div class="market-status-card market-status-square ${m.cardClass}" aria-label="حالة بورصة الذهب">
+      <div>${statusTop}${progressPart}</div>
+      <div><div class="market-square-time">${m.time12}</div><div class="market-square-day">توقيت السعودية</div></div>
+    </div>`;
+  }
+  return `<div class="market-status-section">
+    <div class="hero-lbl market-hours-label"><span style="color:var(--gold-d)">⏱</span> تفتح الاثنين 1:00 ص · تغلق الجمعة 12:00 ص · عطلة السبت والأحد</div>
+    <div class="market-status-card market-status-wide ${m.cardClass}" aria-label="حالة بورصة الذهب">
+      <div class="market-status-main"><div class="market-status-copy">${statusTop}</div>${countdown}</div>
+      ${progressPart}
+    </div>
+  </div>`;
+}
+
+function renderHero(){
+  if(!S.gold){ showFatalLoadError('لم يتم تحميل سعر الذهب بعد.'); return; }
+  const c = S.cur;
+  const cu = CURRENCIES[c];
+  const g24 = gramPrice(S.gold, c, 1);
+  const diffVal = S.prevGold ? g24 - gramPrice(S.prevGold, c, 1) : (S.goldChange || 0) * (cu.r / OZ);
+  const pctVal = S.prevGold ? (diffVal / gramPrice(S.prevGold, c, 1)) * 100 : (S.goldChangePct || 0);
+  const chartDiff = getChartDiff();
+  const chartIsUp = chartDiff.diff >= 0;
+  const chartIsZero = Math.abs(chartDiff.pct) < 0.005;
+  const trendClass = chartIsZero ? 'nt' : chartIsUp ? 'up' : 'dn';
+  const arrow = chartIsZero ? '→' : chartIsUp ? '↗' : '↘';
+  const isUp = diffVal >= 0;
+  const isZero = Math.abs(pctVal) < 0.001;
+  const timeStr = new Date().toLocaleTimeString('ar-SA', {hour:'2-digit', minute:'2-digit'});
+  const dateStr = new Date().toLocaleDateString('ar-SA', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+  const chartStats = getChartStats(c);
+  const prediction = calculatePrediction();
+
+  $('heroCard').innerHTML = `
+    ${renderMarketStatusCard('wide')}
+    <div class="hero-body">
+      <div class="chart-box">
+        <div class="chart-top">
+          <div>
+            <div class="chart-lbl">XAU / USD</div>
+            <div class="chart-val">${S.gold.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})} $</div>
+            <div class="chart-sub">مقارنة بحركة السعر المتاحة <span class="chart-source-chip">${chartStats.source}</span></div>
+            <div style="margin-top:6px;padding-top:6px;border-top:.5px solid var(--line);font-size:10px;color:var(--txt3);font-family:'IBM Plex Mono',monospace;line-height:1.7;direction:ltr">
+              ${S.gold.toFixed(2)} × ${CURRENCIES[c].r.toFixed(4)} ÷ ${OZ.toFixed(4)} × purity
+              <div class="chart-micro-row"><span>HIGH ${chartStats.high}</span><span>LOW ${chartStats.low}</span></div>
+            </div>
+          </div>
+          <div class="chart-trend"><div class="trend-arrow ${trendClass}">${arrow}</div><div class="trend-text ${trendClass}">${chartIsZero ? '0.00%' : (chartIsUp ? '+' : '') + chartDiff.pct.toFixed(2) + '%'}</div></div>
+        </div>
+        <div class="chart-canvas-wrap"><canvas id="goldChart"></canvas></div>
+        <div class="chart-foot"><span>${S.history.length ? formatChartTime(S.history[0].t) + ' - ' + formatChartTime(S.history[S.history.length-1].t) : '—'}</span><span>${chartStats.changeLabel}</span></div>
+      </div>
+    </div>
+    <div class="hero-bottom-wrap">
+      <div class="hero-meta-row">
+        <div class="hero-meta-text">
+          <div class="hero-badges">
+            ${isZero ? `<span class="badge nt">— مستقر</span>` : `<span class="badge ${isUp ? 'up' : 'dn'}">${isUp ? '▲' : '▼'} ${Math.abs(pctVal).toFixed(2)}%</span><span class="badge ${isUp ? 'up' : 'dn'}">${isUp ? '+' : ''}${fmt(diffVal,c)} ${cu.s}</span>`}
+          </div>
+          <div class="hero-date">${dateStr} · ${timeStr}</div>
+        </div>
+        <div class="timer-ring-compact">
+          <div class="ring-compact" id="ringEl" style="--prog:0deg"><span class="ring-compact-num" id="ringNum">${S.isRefreshing ? '...' : S.timerSec}</span></div>
+          <div class="ring-compact-info"><div class="ring-compact-title">التحديث القادم</div><div class="ring-compact-sub" id="ringSubTxt">${S.isRefreshing ? 'جارٍ التحديث الآن...' : 'بعد ' + S.timerSec + ' ثانية'}</div><div class="ring-compact-updated" id="ringUpdated">آخر تحديث: ${timeStr}</div></div>
+        </div>
+      </div>
+      <div class="hero-forecast-row">${renderForecastCard(prediction)}</div>
+    </div>`;
+  setTimeout(drawGoldChart, 30);
+}
+
+function drawGoldChart(){
+  const canvas = $('goldChart');
+  if(!canvas) return;
+  const wrap = canvas.parentElement;
+  const dpr = window.devicePixelRatio || 1;
+  const width = Math.max(260, wrap.clientWidth || 300);
+  const height = 88;
+  canvas.width = width * dpr;
+  canvas.height = height * dpr;
+  canvas.style.width = width + 'px';
+  canvas.style.height = height + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+  ctx.clearRect(0,0,width,height);
+  const data = (S.history || []).filter(x => x && x.p > 100).sort((a,b)=>a.t-b.t);
+  if(data.length < 2){
+    ctx.fillStyle = 'rgba(184,199,189,.75)';
+    ctx.font = '11px IBM Plex Sans Arabic';
+    ctx.textAlign = 'center';
+    ctx.fillText('جاري جمع بيانات الرسم الحقيقي — لا يوجد خط وهمي', width/2, height/2);
+    return;
+  }
+  const prices = data.map(x => x.p);
+  let min = Math.min(...prices), max = Math.max(...prices);
+  const range = max - min;
+  const padding = Math.max(range * 0.15, data[data.length-1].p * 0.0003);
+  min -= padding; max += padding;
+  const padX=8, padY=12, plotW=width-padX*2, plotH=height-padY*2;
+  const color = getChartDiff().diff >= 0 ? '#3ee6a6' : '#ff6f7e';
+  const glow = getChartDiff().diff >= 0 ? 'rgba(62,230,166,.35)' : 'rgba(255,111,126,.35)';
+  ctx.strokeStyle='rgba(255,255,255,.055)'; ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){ const y=padY+(plotH/4)*i; ctx.beginPath(); ctx.moveTo(padX,y); ctx.lineTo(width-padX,y); ctx.stroke(); }
+  const xAt=i=>padX+(i/(data.length-1))*plotW;
+  const yAt=p=>padY+(1-((p-min)/(max-min)))*plotH;
+  ctx.beginPath(); ctx.moveTo(xAt(0), yAt(data[0].p));
+  for(let i=1;i<data.length;i++) ctx.lineTo(xAt(i), yAt(data[i].p));
+  ctx.strokeStyle=glow; ctx.lineWidth=6; ctx.globalAlpha=.25; ctx.stroke(); ctx.globalAlpha=1;
+  ctx.beginPath(); ctx.moveTo(xAt(0), yAt(data[0].p));
+  for(let i=1;i<data.length;i++) ctx.lineTo(xAt(i), yAt(data[i].p));
+  ctx.strokeStyle=color; ctx.lineWidth=2.4; ctx.lineJoin='round'; ctx.lineCap='round'; ctx.stroke();
+  const lx=xAt(data.length-1), ly=yAt(data[data.length-1].p);
+  ctx.lineTo(lx, height-padY); ctx.lineTo(xAt(0), height-padY); ctx.closePath();
+  const gr=ctx.createLinearGradient(0,padY,0,height);
+  if(color === '#3ee6a6'){ gr.addColorStop(0,'rgba(62,230,166,.25)'); gr.addColorStop(1,'rgba(62,230,166,0)'); }
+  else { gr.addColorStop(0,'rgba(255,111,126,.25)'); gr.addColorStop(1,'rgba(255,111,126,0)'); }
+  ctx.fillStyle=gr; ctx.fill();
+  ctx.beginPath(); ctx.arc(lx,ly,9,0,Math.PI*2); ctx.fillStyle=glow; ctx.fill();
+  ctx.beginPath(); ctx.arc(lx,ly,4,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill();
+  ctx.font='10px IBM Plex Mono'; ctx.textAlign='left'; ctx.fillStyle='rgba(255,255,255,.58)';
+  ctx.fillText(max.toFixed(0),2,padY-2); ctx.fillText(min.toFixed(0),2,height-2);
+}
+
+function renderAll(){
+  $('mainContent').style.display = 'block';
+  try{ renderHero(); }catch(e){ console.error(e); showFatalLoadError('حدث خطأ في عرض السعر.'); }
+  try{ renderKarats(); renderBuySell(); renderSilver(); renderMeta(); }catch(e){ console.warn(e); }
+}
+
+function showFatalLoadError(msg){
+  const savedGold = parseFloat(localStorage.getItem('_gp') || '0');
+  $('heroCard').innerHTML = `<div class="hero-safe-error"><b>⚠ ${msg || 'تعذّر تحميل الأسعار'}</b><p>${savedGold > 100 ? 'يوجد سعر محفوظ ويمكن محاولة التحديث مرة أخرى.' : 'تحقق من الاتصال ثم اضغط تحديث.'}</p><button onclick="manualRefresh()">تحديث الأسعار الآن</button></div>`;
+}
+
+async function fetchPrices(){
+  if(S.isRefreshing) return;
+  S.isRefreshing = true;
+  const btn = $('refreshBtn');
+  const live = $('liveText');
+  if(btn) btn.classList.add('spinning');
+  if(live) live.textContent = 'تحديث...';
+  updateRing();
+
+  // Show saved data instantly on first load so the app never stays on the loading screen.
+  if(!S.initialized){
+    const saved = parseFloat(localStorage.getItem('_gp') || '0');
+    const savedSilver = parseFloat(localStorage.getItem('_sp') || '0');
+    if(saved > 100){
+      S.gold = saved; S.silver = savedSilver > 1 ? savedSilver : null; S.prevGold = null; S.goldChange = 0; S.goldChangePct = 0; S.dataSource = 'آخر سعر محفوظ'; S.lastUpdate = new Date();
+      await updateHistory(); S.initialized = true; renderAll();
+    }
+  }
+
+  try{
+    const [pR, fR] = await Promise.allSettled([fetchGoldPrice(), fetchFxRates()]);
+    const prices = pR.status === 'fulfilled' ? pR.value : null;
+    const fxRates = fR.status === 'fulfilled' ? fR.value : null;
+    if(fxRates){
+      const keys = ['SAR','AED','KWD','QAR','BHD','OMR','JOD','EGP','EUR','GBP','INR','PKR','TRY'];
+      for(const k of keys){ const v = fxRates[k] || fxRates[k.toLowerCase()]; if(v && CURRENCIES[k]) CURRENCIES[k].r = +v; }
+      CURRENCIES.SAR.r = 3.75; CURRENCIES.USD.r = 1;
+    }
+    if(prices && prices.gold > 100){
+      S.prevGold = S.gold;
+      S.gold = prices.gold;
+      S.silver = prices.silver;
+      S.goldChange = prices.change;
+      S.goldChangePct = prices.changePct;
+      S.dataSource = prices.src;
+      S.lastUpdate = new Date();
+      localStorage.setItem('_gp', String(S.gold));
+      if(S.silver) localStorage.setItem('_sp', String(S.silver));
+      saveLocalHistory(S.gold);
+      await updateHistory();
+      try{ checkFirebaseSave(); }catch(_){ }
+      S.initialized = true;
+      renderAll();
+      hideErr();
+      if(live) live.textContent = 'مباشر';
+      startTimer();
+    }else{
+      const saved = parseFloat(localStorage.getItem('_gp') || '0');
+      if(saved > 100){
+        S.gold = S.gold || saved;
+        await updateHistory();
+        S.initialized = true;
+        renderAll();
+        showErr('تعذّر الاتصال اللحظي — يتم عرض آخر سعر محفوظ.');
+        if(live) live.textContent = 'محفوظ';
+        startTimer();
+      }else{
+        showFatalLoadError('تعذّر الاتصال بمصادر الأسعار.');
+        showErr('تعذّر الاتصال بمصادر الأسعار. حاول التحديث مرة أخرى.');
+        if(live) live.textContent = 'خطأ';
+      }
+    }
+  }catch(e){
+    console.error(e);
+    showFatalLoadError('حدث خطأ أثناء تحديث الأسعار.');
+    showErr('حدث خطأ أثناء تحديث الأسعار.');
+    if(live) live.textContent = 'خطأ';
+  }finally{
+    S.isRefreshing = false;
+    if(btn) btn.classList.remove('spinning');
+    updateRing();
+  }
+}
+
+function startTimer(){
+  clearTimeout(S.timerTO); clearInterval(S.countInt);
+  S.timerSec = REFRESH_SEC;
+  updateRing();
+  S.countInt = setInterval(() => {
+    if(S.isRefreshing){ updateRing(); return; }
+    S.timerSec = Math.max(0, S.timerSec - 1);
+    updateRing();
+    if(S.timerSec <= 0) clearInterval(S.countInt);
+  }, 1000);
+  S.timerTO = setTimeout(() => fetchPrices(), REFRESH_SEC * 1000);
+}
+
+function updateRing(){
+  const el = $('ringEl'), num = $('ringNum'), sub = $('ringSubTxt');
+  if(!el) return;
+  if(S.isRefreshing){
+    el.style.setProperty('--prog','360deg');
+    if(num) num.textContent = '...';
+    if(sub) sub.textContent = 'جارٍ التحديث الآن...';
+    return;
+  }
+  const deg = Math.round(((REFRESH_SEC - S.timerSec) / REFRESH_SEC) * 360);
+  el.style.setProperty('--prog', deg + 'deg');
+  if(num) num.textContent = Math.max(0, S.timerSec);
+  if(sub) sub.textContent = S.timerSec <= 0 ? 'جارٍ التحديث الآن...' : `بعد ${Math.max(0, S.timerSec)} ثانية`;
+}
+
+function manualRefresh(){
+  clearTimeout(S.timerTO); clearInterval(S.countInt); S.timerSec = REFRESH_SEC; fetchPrices();
+}
+
 
 fetchPrices();
 
