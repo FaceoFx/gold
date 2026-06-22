@@ -1,6 +1,7 @@
-const CACHE_NAME = 'gold-price-v36-stable-yahoo-json';
+const CACHE_NAME = 'gold-price-v37-yahoo-first-boot';
 const STATIC_CACHE = [
   './manifest.json',
+  './data/yahoo-gold.json',
   'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap'
 ];
 
