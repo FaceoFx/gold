@@ -1,12 +1,25 @@
 name: Update Yahoo Gold Chart Data
 
 on:
+  # Runs automatically once when you upload this workflow/script/index.
+  push:
+    branches: [ main, master ]
+    paths:
+      - '.github/workflows/update-yahoo-gold.yml'
+      - 'scripts/update_yahoo_gold.py'
+      - 'index.html'
+  # Keeps Yahoo candles fresh. GitHub may delay scheduled jobs a little.
   schedule:
     - cron: '*/5 * * * *'
+  # Optional manual button, not required.
   workflow_dispatch:
 
 permissions:
   contents: write
+
+concurrency:
+  group: yahoo-gold-chart-data
+  cancel-in-progress: true
 
 jobs:
   update-yahoo-gold:
@@ -14,6 +27,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -23,13 +38,14 @@ jobs:
       - name: Fetch Yahoo GC=F candles
         run: python scripts/update_yahoo_gold.py
 
-      - name: Commit updated data
+      - name: Commit updated Yahoo chart data
         run: |
           if [[ -n "$(git status --porcelain data/yahoo-gold.json)" ]]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/yahoo-gold.json
             git commit -m "Update Yahoo gold chart data"
+            git pull --rebase --autostash
             git push
           else
             echo "No Yahoo chart changes to commit."
