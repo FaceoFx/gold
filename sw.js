@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gold-price-v22-stable-forecast';
+const CACHE_NAME = 'gold-price-v34-yahoo-github-mirror';
 const STATIC_CACHE = [
   './manifest.json',
   'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap'
@@ -15,7 +15,11 @@ self.addEventListener('activate', event => {
 });
 
 function isApiRequest(req){
-  return /gold-api|coingecko|open\.er-api|currency-api|query1\.finance|finance\/chart|corsproxy|allorigins|firebaseio|gstatic\.com\/firebase/i.test(req.url);
+  return /gold-api|open\.er-api|currency-api|finance\/chart|corsproxy|allorigins|codetabs|isomorphic-git|firebaseio|gstatic\.com\/firebase/i.test(req.url);
+}
+
+function isYahooDataFile(url){
+  return url.origin === self.location.origin && /\/data\/yahoo-gold\.json$/i.test(url.pathname);
 }
 
 async function networkFirst(request){
@@ -44,7 +48,13 @@ self.addEventListener('fetch', event => {
   if(req.method !== 'GET') return;
   const url = new URL(req.url);
 
-  // Never cache prices, charts, exchange rates, or Firebase data. v22
+  // v34: Yahoo file is same-origin but must be fresh because GitHub Action updates it.
+  if(isYahooDataFile(url)){
+    event.respondWith(networkFirst(req));
+    return;
+  }
+
+  // Never cache prices, chart APIs, exchange rates, proxy attempts, or Firebase data.
   if(isApiRequest(req)){
     event.respondWith(fetch(req, { cache:'no-store' }).catch(() => Response.error()));
     return;

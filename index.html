@@ -330,6 +330,15 @@ button:focus-visible,.csel:focus-visible,.calc-input:focus-visible,.ref-card:foc
 }
 @media(max-width:340px){.hero-meta-row{grid-template-columns:1fr}.hero-meta-row .timer-ring-compact{min-height:0}.hero-meta-text .hero-badges{justify-content:center!important}.hero-meta-text{text-align:center}}
 
+
+/* === v33 chart polish === */
+.chart-canvas-wrap{height:124px!important;margin-top:8px!important;position:relative!important}
+#goldChart{height:124px!important;width:100%!important;display:block!important;cursor:crosshair!important;touch-action:none!important}
+.chart-box{min-height:235px!important;border-radius:24px!important}
+.chart-source-chip{border-color:rgba(255,215,122,.28)!important;color:#ffe08a!important;background:rgba(255,215,122,.08)!important}
+.chart-micro-row{align-items:center!important}.chart-micro-row span{white-space:nowrap!important}
+@media(max-width:370px){.chart-canvas-wrap,#goldChart{height:116px!important}.chart-box{min-height:225px!important}}
+
 </style>
 </head>
 
@@ -1744,7 +1753,7 @@ async function loadFirebaseHistory() {
 }
 
 // Save to Firebase every hour
-let lastFirebaseSave = 0;
+var lastFirebaseSave = (typeof lastFirebaseSave !== 'undefined' ? lastFirebaseSave : 0);
 function checkFirebaseSave(){
   const now = Date.now();
   if(firebaseEnabled && S.gold && (now - lastFirebaseSave) > 3600000){ // 1 hour
@@ -2501,6 +2510,665 @@ function updateRing(){
 function manualRefresh(){
   clearTimeout(S.timerTO); clearInterval(S.countInt); S.timerSec = REFRESH_SEC; fetchPrices();
 }
+
+
+/* === v33 AUTO YAHOO ASSIST — no manual worker setup ===
+   Important: Yahoo Finance does not reliably allow browser CORS.
+   This version tries Yahoo through a small no-setup public proxy chain, only once per cooldown,
+   caches successful candles, and never spams direct Yahoo/CoinGecko/TradingView requests.
+*/
+const V33_YAHOO_CACHE = '_goldYahooAutoCacheV33';
+const V33_YAHOO_LAST_ATTEMPT = '_goldYahooAutoLastAttemptV33';
+const V33_YAHOO_FAIL_UNTIL = '_goldYahooAutoFailUntilV33';
+const V33_YAHOO_OK_GAP = 10 * 60 * 1000;
+const V33_YAHOO_FAIL_GAP = 18 * 60 * 1000;
+S.chartHover = null;
+S.chartEventsBound = false;
+console.log('✅ v33 auto Yahoo assist active: no manual proxy setup, throttled Yahoo public proxy fallback, no spam.');
+
+async function tryFetch(url, ms, asText=false){
+  try{
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), ms || 6500);
+    const r = await fetch(url, { signal:controller.signal, cache:'no-store' });
+    clearTimeout(timer);
+    if(!r.ok) return null;
+    if(asText) return await r.text();
+    return await r.json();
+  }catch(_){ return null; }
+}
+
+async function fetchGoldPrice(){
+  // Fast, low-noise price source. CoinGecko removed here because public browsers were hitting 429.
+  const goldApi = await v14WithTimeout(tryFetch('https://api.gold-api.com/price/XAU', 5200), 5600, null);
+  const price = parsePrice(goldApi);
+  if(!price || price < 100) return null;
+
+  // Silver is optional and never allowed to block gold rendering.
+  v14WithTimeout(tryFetch('https://api.gold-api.com/price/XAG', 3500), 3800, null).then(silverApi => {
+    const silver = parsePrice(silverApi);
+    if(silver && silver > 1){ S.silver = silver; localStorage.setItem('_sp', String(silver)); if(S.initialized) renderAll(); }
+  }).catch(()=>{});
+
+  let ref = parseFloat(localStorage.getItem('_gpClose') || '0');
+  let refTs = parseInt(localStorage.getItem('_gpCloseTs') || '0');
+  const now = Date.now();
+  const sixHours = 6 * 60 * 60 * 1000;
+  const savedLast = parseFloat(localStorage.getItem('_gp') || '0');
+  if(!ref || ref < 100 || now - refTs > sixHours){
+    ref = savedLast > 100 ? savedLast : price;
+    localStorage.setItem('_gpClose', String(ref));
+    localStorage.setItem('_gpCloseTs', String(now));
+  }
+  const change = price - ref;
+  return { gold:price, silver:S.silver || null, change, changePct:ref > 0 ? (change / ref) * 100 : 0, src:'gold-api.com' };
+}
+
+function v33YahooCanAttempt(force=false){
+  const now = Date.now();
+  const failUntil = parseInt(localStorage.getItem(V33_YAHOO_FAIL_UNTIL) || '0');
+  const last = parseInt(localStorage.getItem(V33_YAHOO_LAST_ATTEMPT) || '0');
+  if(force) return true;
+  if(failUntil && now < failUntil) return false;
+  if(last && now - last < V33_YAHOO_OK_GAP) return false;
+  return true;
+}
+
+function v33YahooBase(symbol){
+  return `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=1d&interval=5m&includePrePost=true`;
+}
+
+function v33YahooEndpoints(symbol){
+  const base = v33YahooBase(symbol);
+  const urls = [];
+  // Direct Yahoo is disabled by default because it creates browser CORS errors.
+  // Enable manually only for debugging: localStorage.setItem('GOLD_ALLOW_DIRECT_YAHOO','1')
+  if(localStorage.getItem('GOLD_ALLOW_DIRECT_YAHOO') === '1') urls.push(base);
+  // Public no-setup proxies. They may be rate-limited, so we call them sequentially and rarely.
+  urls.push('https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(base));
+  urls.push('https://api.allorigins.win/raw?url=' + encodeURIComponent(base));
+  urls.push('https://corsproxy.io/?' + encodeURIComponent(base));
+  return urls;
+}
+
+async function v33ReadYahooEndpoint(url){
+  // Some proxies return JSON with JSON content-type, others return text/plain.
+  let j = await v14WithTimeout(tryFetch(url, 5200, false), 5600, null);
+  if(j) return j;
+  const txt = await v14WithTimeout(tryFetch(url, 5200, true), 5600, null);
+  if(!txt) return null;
+  try{ return JSON.parse(txt); }catch(_){
+    const a = txt.indexOf('{'), b = txt.lastIndexOf('}');
+    if(a >= 0 && b > a){ try{ return JSON.parse(txt.slice(a,b+1)); }catch(__){} }
+  }
+  return null;
+}
+
+async function fetchYahooChartFast(symbol){
+  const endpoints = v33YahooEndpoints(symbol);
+  for(const url of endpoints){
+    const j = await v33ReadYahooEndpoint(url);
+    const data = parseYahooChartPayload(j);
+    if(data && data.length >= 8) return data;
+  }
+  return [];
+}
+
+function savePriceToFirebase(price){
+  if(!firebaseEnabled || !pricesRef || !price || price < 100) return;
+  const now = new Date();
+  const dateKey = now.toISOString().split('T')[0];
+  const minuteBucket = Math.floor(now.getMinutes() / 5) * 5;
+  const key = String(now.getHours()).padStart(2,'0') + '_' + String(minuteBucket).padStart(2,'0');
+  pricesRef.child(dateKey).child(key).set({ price, timestamp:Date.now(), date:now.toISOString() }).catch(()=>{});
+}
+
+var lastFirebaseSave = (typeof lastFirebaseSave !== 'undefined' ? lastFirebaseSave : 0);
+function checkFirebaseSave(){
+  const now = Date.now();
+  if(firebaseEnabled && S.gold && (now - lastFirebaseSave) > 5 * 60 * 1000){
+    savePriceToFirebase(S.gold);
+    lastFirebaseSave = now;
+  }
+}
+
+async function loadFirebaseHistory(){
+  if(!firebaseEnabled || !pricesRef) return;
+  try{
+    const history = [];
+    const today = new Date();
+    // Fast shared cache: only last 3 days, enough for 12h chart, not 30 slow reads.
+    for(let i=0;i<3;i++){
+      const date = new Date(today);
+      date.setDate(date.getDate() - i);
+      const dateKey = date.toISOString().split('T')[0];
+      const snap = await v14WithTimeout(pricesRef.child(dateKey).once('value'), 1700, null);
+      const dayData = snap && snap.val ? snap.val() : null;
+      if(dayData){
+        Object.keys(dayData).forEach(k => {
+          const d = dayData[k];
+          if(d && d.price > 100 && d.timestamp) history.push({p:+d.price, t:+d.timestamp, firebase:true, real:true});
+        });
+      }
+    }
+    const cutoff = Date.now() - CHART_HOURS * 60 * 60 * 1000;
+    const clean = history.filter(x => x.t >= cutoff && x.p > 100).sort((a,b)=>a.t-b.t);
+    if(clean.length >= 2){
+      const local = getLocalHistory();
+      S.history = mergeHistoryPoints([...clean, ...local]).filter(x => x.t >= cutoff);
+      S.chartSource = 'Firebase سريع';
+      S.historyQuality = clean.length >= 8 ? 'shared_cache' : 'limited';
+      saveChartCache(S.history, 'Firebase سريع');
+      if(S.initialized) renderAll();
+    }
+  }catch(e){ console.warn('Firebase history skipped:', e); }
+}
+
+async function refreshRemoteHistoryInBackground(force=false){
+  if(S.remoteHistoryBusy || !S.gold) return;
+  if(!v33YahooCanAttempt(force)) return;
+  S.remoteHistoryBusy = true;
+  localStorage.setItem(V33_YAHOO_LAST_ATTEMPT, String(Date.now()));
+  try{
+    // GC=F is the useful Yahoo series here. XAUUSD=X often returns 404; use it only as second fallback.
+    let data = await fetchYahooChartFast('GC=F');
+    let source = 'Yahoo Futures Auto';
+    if(!data || data.length < 8){ data = await fetchYahooChartFast('XAUUSD=X'); source = 'Yahoo XAU/USD Auto'; }
+    const cutoff = Date.now() - CHART_HOURS * 60 * 60 * 1000;
+    data = (data || []).filter(x => x.t >= cutoff && x.p > 100).sort((a,b)=>a.t-b.t);
+    if(data.length >= 8){
+      const last = data[data.length - 1].p;
+      if(last && Math.abs(S.gold - last) / S.gold < 0.08){
+        const offset = S.gold - last;
+        data = data.map(x => ({...x, p:x.p + offset, real:true, yahoo:true}));
+      }
+      data.push({t:Date.now(), p:S.gold, live:true, real:true, yahoo:true});
+      const local = getLocalHistory();
+      S.history = mergeHistoryPoints([...data, ...local]).filter(x => x.t >= cutoff);
+      S.chartSource = source;
+      S.historyQuality = 'market';
+      saveChartCache(S.history, source);
+      localStorage.setItem(V33_YAHOO_CACHE, JSON.stringify({ts:Date.now(), source, data:S.history.slice(-360)}));
+      localStorage.removeItem(V33_YAHOO_FAIL_UNTIL);
+      if(S.initialized) renderAll();
+      return;
+    }
+    localStorage.setItem(V33_YAHOO_FAIL_UNTIL, String(Date.now() + V33_YAHOO_FAIL_GAP));
+  }catch(_){
+    localStorage.setItem(V33_YAHOO_FAIL_UNTIL, String(Date.now() + V33_YAHOO_FAIL_GAP));
+  }finally{ S.remoteHistoryBusy = false; }
+}
+
+function getV33YahooCache(){
+  try{
+    const c = JSON.parse(localStorage.getItem(V33_YAHOO_CACHE) || 'null');
+    if(!c || !Array.isArray(c.data)) return null;
+    if(Date.now() - (c.ts || 0) > 6 * 60 * 60 * 1000) return null;
+    const cutoff = Date.now() - CHART_HOURS * 60 * 60 * 1000;
+    const data = c.data.filter(x => x && x.t >= cutoff && x.p > 100).sort((a,b)=>a.t-b.t).map(x => ({...x, cached:true, real:true, yahoo:true}));
+    if(data.length < 8) return null;
+    return {data, source:(c.source || 'Yahoo Auto') + ' محفوظة'};
+  }catch(_){ return null; }
+}
+
+async function updateHistory(){
+  const cutoff = Date.now() - CHART_HOURS * 60 * 60 * 1000;
+  const local = getLocalHistory();
+  const yahooCached = getV33YahooCache();
+  const cached = getChartCache();
+  if(yahooCached){
+    S.history = mergeHistoryPoints([...yahooCached.data, ...local]).filter(x => x.t >= cutoff);
+    S.chartSource = yahooCached.source;
+    S.historyQuality = 'cached_market';
+  }else if(cached){
+    S.history = mergeHistoryPoints([...cached.data, ...local]).filter(x => x.t >= cutoff);
+    S.chartSource = cached.source.includes('محفوظة') ? cached.source : `${cached.source} محفوظة`;
+    S.historyQuality = 'cached_market';
+  }else if(local.length >= 2){
+    S.history = local.filter(x => x.t >= cutoff);
+    S.chartSource = 'بيانات محلية';
+    S.historyQuality = local.length >= 8 ? 'local' : 'limited';
+  }else if(S.gold){
+    S.history = [{t:Date.now(), p:S.gold, local:true, live:true}];
+    S.chartSource = 'بناء الرسم';
+    S.historyQuality = 'insufficient';
+  }else{
+    S.history = [];
+    S.chartSource = '—';
+    S.historyQuality = 'none';
+  }
+  // Try Yahoo automatically in the background. If public proxies fail, wait before trying again.
+  setTimeout(() => refreshRemoteHistoryInBackground(false), 800);
+}
+
+function bindGoldChartEvents(canvas){
+  if(!canvas || canvas._v33Bound) return;
+  canvas._v33Bound = true;
+  const setHover = (ev) => {
+    const r = canvas.getBoundingClientRect();
+    const touch = ev.touches && ev.touches[0];
+    const clientX = touch ? touch.clientX : ev.clientX;
+    const clientY = touch ? touch.clientY : ev.clientY;
+    S.chartHover = {x:clientX - r.left, y:clientY - r.top};
+    drawGoldChart();
+  };
+  canvas.addEventListener('mousemove', setHover, {passive:true});
+  canvas.addEventListener('touchmove', setHover, {passive:true});
+  canvas.addEventListener('mouseleave', () => { S.chartHover = null; drawGoldChart(); });
+  canvas.addEventListener('touchend', () => { S.chartHover = null; drawGoldChart(); }, {passive:true});
+}
+
+function drawGoldChart(){
+  const canvas = $('goldChart');
+  if(!canvas) return;
+  const wrap = canvas.parentElement;
+  if(wrap){ wrap.style.height = '124px'; }
+  const dpr = window.devicePixelRatio || 1;
+  const width = Math.max(270, wrap?.clientWidth || 320);
+  const height = 124;
+  canvas.width = Math.round(width * dpr);
+  canvas.height = Math.round(height * dpr);
+  canvas.style.width = width + 'px';
+  canvas.style.height = height + 'px';
+  bindGoldChartEvents(canvas);
+
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,width,height);
+  const data = (S.history || []).filter(x => x && x.p > 100).sort((a,b)=>a.t-b.t);
+  const padL=44, padR=10, padT=13, padB=24;
+  const plotW=width-padL-padR, plotH=height-padT-padB;
+
+  // Background panel
+  const bg = ctx.createLinearGradient(0,0,0,height);
+  bg.addColorStop(0,'rgba(255,255,255,.025)'); bg.addColorStop(1,'rgba(0,0,0,.08)');
+  ctx.fillStyle = bg; ctx.fillRect(padL,padT,plotW,plotH);
+
+  ctx.strokeStyle='rgba(255,255,255,.065)'; ctx.lineWidth=1;
+  ctx.font='10px IBM Plex Mono'; ctx.fillStyle='rgba(230,245,238,.62)'; ctx.textAlign='right'; ctx.textBaseline='middle';
+  for(let i=0;i<=4;i++){
+    const y=padT+(plotH/4)*i;
+    ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(width-padR,y); ctx.stroke();
+  }
+  for(let i=0;i<=4;i++){
+    const x=padL+(plotW/4)*i;
+    ctx.beginPath(); ctx.moveTo(x,padT); ctx.lineTo(x,padT+plotH); ctx.stroke();
+  }
+
+  if(data.length < 2){
+    const p = S.gold || parseFloat(localStorage.getItem('_gp') || '0') || 0;
+    ctx.fillStyle='rgba(255,215,122,.9)'; ctx.textAlign='center'; ctx.font='11px IBM Plex Sans Arabic';
+    ctx.fillText(p > 100 ? 'قراءة السعر الآن — يتم بناء تاريخ الرسم تلقائيًا' : 'جاري تجهيز الرسم الحي', padL + plotW/2, padT + plotH/2);
+    if(p > 100){
+      const y=padT+plotH/2;
+      ctx.setLineDash([5,5]); ctx.strokeStyle='rgba(255,215,122,.30)'; ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(width-padR,y); ctx.stroke(); ctx.setLineDash([]);
+    }
+    return;
+  }
+
+  const prices = data.map(x=>x.p);
+  let min = Math.min(...prices), max = Math.max(...prices);
+  const range = Math.max(max - min, prices[prices.length-1] * 0.0007);
+  min -= range * 0.13; max += range * 0.13;
+  const xAt = i => padL + (i/(data.length-1))*plotW;
+  const yAt = p => padT + (1-((p-min)/(max-min)))*plotH;
+  const color = getChartDiff().diff >= 0 ? '#3ee6a6' : '#ff6f7e';
+  const glow = getChartDiff().diff >= 0 ? 'rgba(62,230,166,.38)' : 'rgba(255,111,126,.38)';
+
+  // Axis labels
+  ctx.fillStyle='rgba(230,245,238,.62)'; ctx.textAlign='right'; ctx.font='10px IBM Plex Mono';
+  for(let i=0;i<=4;i++){
+    const val = max - ((max-min)/4)*i;
+    const y=padT+(plotH/4)*i;
+    ctx.fillText(val.toLocaleString('en-US',{maximumFractionDigits:0}), padL-6, y);
+  }
+  ctx.textAlign='center'; ctx.textBaseline='top';
+  for(let i=0;i<=4;i++){
+    const idx = Math.min(data.length-1, Math.round((data.length-1)*(i/4)));
+    ctx.fillText(formatChartTime(data[idx].t), padL+(plotW/4)*i, padT+plotH+7);
+  }
+
+  // Current price dashed line
+  const last = data[data.length-1];
+  const lastY = yAt(last.p);
+  ctx.setLineDash([4,4]); ctx.strokeStyle='rgba(255,255,255,.12)'; ctx.beginPath(); ctx.moveTo(padL,lastY); ctx.lineTo(width-padR,lastY); ctx.stroke(); ctx.setLineDash([]);
+
+  // Build smooth curve path with quadratic midpoints.
+  const path = new Path2D();
+  path.moveTo(xAt(0), yAt(data[0].p));
+  if(data.length > 2){
+    for(let i=1;i<data.length-1;i++){
+      const x=xAt(i), y=yAt(data[i].p);
+      const mx=(x+xAt(i+1))/2, my=(y+yAt(data[i+1].p))/2;
+      path.quadraticCurveTo(x,y,mx,my);
+    }
+    path.lineTo(xAt(data.length-1), yAt(data[data.length-1].p));
+  }else{
+    path.lineTo(xAt(1), yAt(data[1].p));
+  }
+
+  ctx.save();
+  ctx.shadowColor = glow; ctx.shadowBlur = 12; ctx.strokeStyle=color; ctx.lineWidth=2.4; ctx.lineJoin='round'; ctx.lineCap='round'; ctx.stroke(path);
+  ctx.restore();
+
+  const area = new Path2D(path);
+  area.lineTo(xAt(data.length-1), padT+plotH); area.lineTo(xAt(0), padT+plotH); area.closePath();
+  const gr=ctx.createLinearGradient(0,padT,0,padT+plotH);
+  if(color === '#3ee6a6'){ gr.addColorStop(0,'rgba(62,230,166,.28)'); gr.addColorStop(1,'rgba(62,230,166,0)'); }
+  else{ gr.addColorStop(0,'rgba(255,111,126,.28)'); gr.addColorStop(1,'rgba(255,111,126,0)'); }
+  ctx.fillStyle=gr; ctx.fill(area);
+
+  // H/L markers
+  const hi = Math.max(...prices), lo = Math.min(...prices);
+  const hiI = prices.indexOf(hi), loI = prices.indexOf(lo);
+  ctx.fillStyle='rgba(255,255,255,.85)'; ctx.font='9px IBM Plex Mono'; ctx.textAlign='center'; ctx.textBaseline='bottom';
+  ctx.fillText('H', xAt(hiI), yAt(hi)-4);
+  ctx.textBaseline='top'; ctx.fillText('L', xAt(loI), yAt(lo)+4);
+
+  // Live pulse dot
+  const lx=xAt(data.length-1), ly=yAt(data[data.length-1].p);
+  const pulse = 7 + Math.sin(Date.now()/260) * 2.2;
+  ctx.beginPath(); ctx.arc(lx,ly,pulse,0,Math.PI*2); ctx.fillStyle=glow; ctx.fill();
+  ctx.beginPath(); ctx.arc(lx,ly,4.2,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill();
+  ctx.beginPath(); ctx.arc(lx,ly,2.4,0,Math.PI*2); ctx.fillStyle=color; ctx.fill();
+
+  // Hover/crosshair tooltip
+  const hv = S.chartHover;
+  if(hv && hv.x >= padL && hv.x <= width-padR && hv.y >= padT && hv.y <= padT+plotH){
+    let idx = Math.round(((hv.x-padL)/plotW)*(data.length-1));
+    idx = Math.max(0, Math.min(data.length-1, idx));
+    const x=xAt(idx), y=yAt(data[idx].p);
+    ctx.strokeStyle='rgba(255,255,255,.26)'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+    ctx.beginPath(); ctx.moveTo(x,padT); ctx.lineTo(x,padT+plotH); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(width-padR,y); ctx.stroke(); ctx.setLineDash([]);
+    ctx.beginPath(); ctx.arc(x,y,4.5,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill();
+    ctx.beginPath(); ctx.arc(x,y,2.8,0,Math.PI*2); ctx.fillStyle=color; ctx.fill();
+    const priceTxt = data[idx].p.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+    const timeTxt = formatChartTime(data[idx].t);
+    ctx.font='11px IBM Plex Mono';
+    const tw = Math.max(ctx.measureText(priceTxt).width, ctx.measureText(timeTxt).width) + 22;
+    const th = 42;
+    let tx = x + 10; if(tx + tw > width - 6) tx = x - tw - 10; if(tx < 6) tx = 6;
+    let ty = y - th - 10; if(ty < 6) ty = y + 12; if(ty + th > height - 6) ty = height - th - 6;
+    ctx.fillStyle='rgba(18,20,22,.94)';
+    ctx.beginPath(); ctx.roundRect(tx,ty,tw,th,7); ctx.fill();
+    ctx.fillStyle='#fff'; ctx.textAlign='left'; ctx.textBaseline='top'; ctx.font='700 12px IBM Plex Mono'; ctx.fillText(priceTxt, tx+10, ty+7);
+    ctx.fillStyle='rgba(255,215,122,.92)'; ctx.font='10px IBM Plex Mono'; ctx.fillText(timeTxt, tx+10, ty+25);
+  }
+}
+
+
+
+/* === v34 YAHOO GITHUB AUTO MIRROR ===
+   Why: browser Yahoo CORS is unreliable on GitHub Pages.
+   This version reads Yahoo candles from a same-origin file generated by GitHub Actions:
+   data/yahoo-gold.json. That gives users Yahoo-shaped candles without PC CORS problems.
+   If the file is missing, it safely falls back to cached Yahoo/Firebase/local and tries public proxies rarely in background.
+*/
+const V34_YAHOO_CACHE = '_goldYahooMirrorCacheV34';
+const V34_YAHOO_LAST_ATTEMPT = '_goldYahooPublicProxyLastAttemptV34';
+const V34_YAHOO_FAIL_UNTIL = '_goldYahooPublicProxyFailUntilV34';
+const V34_YAHOO_OK_GAP = 6 * 60 * 1000;
+const V34_YAHOO_FAIL_GAP = 12 * 60 * 1000;
+const V34_REPO_MAX_AGE = 18 * 60 * 60 * 1000;
+console.log('✅ v34 Yahoo GitHub mirror active: same-origin Yahoo candles first, Firebase mirror second, browser Yahoo only as rare background fallback.');
+
+function v34Number(x){
+  const n = Number(x);
+  return Number.isFinite(n) ? n : null;
+}
+
+function v34NormalizeCandles(raw, source){
+  let arr = Array.isArray(raw) ? raw : [];
+  arr = arr.map(x => {
+    const t = v34Number(x.t || x.time || x.timestamp);
+    const p = v34Number(x.p || x.price || x.close || x.c);
+    return { t: t && t < 10000000000 ? t * 1000 : t, p, real:true, yahoo:true };
+  }).filter(x => x.t && x.p && x.p > 100 && Number.isFinite(x.t) && Number.isFinite(x.p))
+    .sort((a,b)=>a.t-b.t);
+
+  const cutoff = Date.now() - CHART_HOURS * 60 * 60 * 1000;
+  let clean = arr.filter(x => x.t >= cutoff);
+
+  // If market is closed and the 12h window is empty, keep the latest visible 12h block from Yahoo.
+  if(clean.length < 8 && arr.length >= 8){
+    const lastT = arr[arr.length - 1].t;
+    clean = arr.filter(x => x.t >= lastT - CHART_HOURS * 60 * 60 * 1000);
+  }
+
+  // Compact near-duplicate timestamps and remove null closes.
+  const compact = [];
+  for(const item of clean){
+    const last = compact[compact.length - 1];
+    if(!last || Math.abs(item.t - last.t) >= 60 * 1000) compact.push({...item});
+    else last.p = item.p;
+  }
+  clean = compact;
+
+  if(clean.length >= 2 && S.gold && S.gold > 100){
+    const last = clean[clean.length - 1].p;
+    if(last && Math.abs(S.gold - last) / S.gold < 0.08){
+      const offset = S.gold - last;
+      clean = clean.map(x => ({...x, p:x.p + offset, offsetApplied:true}));
+    }
+    const lastT = clean[clean.length - 1]?.t || 0;
+    if(Date.now() - lastT > 90 * 1000 || Math.abs((clean[clean.length - 1]?.p || 0) - S.gold) > 0.01){
+      clean.push({t:Date.now(), p:S.gold, live:true, real:true, yahoo:true});
+    }
+  }
+
+  return clean.map(x => ({...x, source:source || 'Yahoo'}));
+}
+
+function v34ParseYahooAny(j, fallbackSource){
+  if(!j) return null;
+  if(Array.isArray(j)){
+    const data = v34NormalizeCandles(j, fallbackSource || 'Yahoo');
+    return data.length >= 8 ? {data, source:fallbackSource || 'Yahoo', updatedAt:Date.now()} : null;
+  }
+  if(Array.isArray(j.candles)){
+    const data = v34NormalizeCandles(j.candles, j.source || fallbackSource || 'Yahoo GitHub');
+    return data.length >= 8 ? {data, source:j.source || fallbackSource || 'Yahoo GitHub', updatedAt:v34Number(j.updatedAt) || Date.now()} : null;
+  }
+  const r = j?.chart?.result?.[0];
+  const ts = r?.timestamp || [];
+  const quote = r?.indicators?.quote?.[0] || {};
+  const close = quote.close || [];
+  if(ts.length && close.length){
+    const raw = ts.map((t,i)=>({t:t*1000, p:close[i]}));
+    const data = v34NormalizeCandles(raw, fallbackSource || 'Yahoo Futures');
+    return data.length >= 8 ? {data, source:fallbackSource || 'Yahoo Futures', updatedAt:Date.now()} : null;
+  }
+  return null;
+}
+
+async function v34FetchJson(url, ms=4200){
+  try{
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), ms);
+    const r = await fetch(url, { signal:controller.signal, cache:'no-store' });
+    clearTimeout(timer);
+    if(!r.ok) return null;
+    const txt = await r.text();
+    try{ return JSON.parse(txt); }catch(_){
+      const a = txt.indexOf('{'), b = txt.lastIndexOf('}');
+      if(a >= 0 && b > a) return JSON.parse(txt.slice(a,b+1));
+    }
+  }catch(_){ }
+  return null;
+}
+
+async function v34FetchRepoYahoo(){
+  // Same-origin file generated by GitHub Actions. No CORS, no proxy, no browser spam.
+  const url = 'data/yahoo-gold.json?cb=' + Math.floor(Date.now() / 60000);
+  const j = await v34FetchJson(url, 2600);
+  const parsed = v34ParseYahooAny(j, 'Yahoo GitHub Auto');
+  if(!parsed) return null;
+  const age = Date.now() - (parsed.updatedAt || 0);
+  if(parsed.updatedAt && age > V34_REPO_MAX_AGE && !parsed.data.some(x => Date.now() - x.t < V34_REPO_MAX_AGE)) return null;
+  return {...parsed, source:'Yahoo GitHub Auto'};
+}
+
+async function v34FetchFirebaseYahooMirror(){
+  if(!firebaseEnabled || !db) return null;
+  try{
+    const snap = await v14WithTimeout(db.ref('yahooGoldMirror/latest').once('value'), 1800, null);
+    const j = snap && snap.val ? snap.val() : null;
+    const parsed = v34ParseYahooAny(j, 'Yahoo Shared Mirror');
+    if(!parsed) return null;
+    const age = Date.now() - (parsed.updatedAt || 0);
+    if(parsed.updatedAt && age > V34_REPO_MAX_AGE && !parsed.data.some(x => Date.now() - x.t < V34_REPO_MAX_AGE)) return null;
+    return {...parsed, source:'Yahoo Shared Mirror'};
+  }catch(_){ return null; }
+}
+
+async function v34SaveFirebaseYahooMirror(data, source){
+  if(!firebaseEnabled || !db || !Array.isArray(data) || data.length < 8) return;
+  try{
+    const compact = data.slice(-240).map(x => ({t:Math.round(x.t), p:+(+x.p).toFixed(3)}));
+    await db.ref('yahooGoldMirror/latest').set({
+      updatedAt:Date.now(),
+      source:source || 'Yahoo Shared Mirror',
+      symbol:'GC=F',
+      interval:'5m',
+      candles:compact
+    });
+  }catch(_){ }
+}
+
+function v34SaveYahooCache(data, source){
+  try{
+    localStorage.setItem(V34_YAHOO_CACHE, JSON.stringify({ts:Date.now(), source:source || 'Yahoo', candles:data.slice(-260).map(x=>({t:x.t,p:x.p}))}));
+  }catch(_){ }
+}
+
+function v34GetYahooCache(){
+  try{
+    const c = JSON.parse(localStorage.getItem(V34_YAHOO_CACHE) || 'null');
+    if(!c || !Array.isArray(c.candles)) return null;
+    if(Date.now() - (c.ts || 0) > 8 * 60 * 60 * 1000) return null;
+    const parsed = v34ParseYahooAny({candles:c.candles, source:(c.source || 'Yahoo') + ' محفوظة', updatedAt:c.ts}, c.source || 'Yahoo');
+    return parsed ? {...parsed, source:(c.source || 'Yahoo') + ' محفوظة'} : null;
+  }catch(_){ return null; }
+}
+
+function v34ApplyYahooSet(set, source){
+  if(!set || !Array.isArray(set.data) || set.data.length < 8) return false;
+  S.history = set.data;
+  S.chartSource = source || set.source || 'Yahoo';
+  S.historyQuality = 'market';
+  saveChartCache(S.history, S.chartSource);
+  v34SaveYahooCache(S.history, S.chartSource);
+  return true;
+}
+
+async function v34LoadBestYahooSet(){
+  const cached = v34GetYahooCache() || (typeof getV33YahooCache === 'function' ? getV33YahooCache() : null);
+  if(cached && cached.data && cached.data.length >= 8) return cached;
+
+  const [repoR, fbR] = await Promise.allSettled([v34FetchRepoYahoo(), v34FetchFirebaseYahooMirror()]);
+  const candidates = [];
+  if(repoR.status === 'fulfilled' && repoR.value) candidates.push(repoR.value);
+  if(fbR.status === 'fulfilled' && fbR.value) candidates.push(fbR.value);
+  candidates.sort((a,b)=>(b.updatedAt || 0) - (a.updatedAt || 0));
+  return candidates[0] || null;
+}
+
+function v34YahooCanAttempt(force=false){
+  const now = Date.now();
+  if(force) return true;
+  const failUntil = parseInt(localStorage.getItem(V34_YAHOO_FAIL_UNTIL) || '0');
+  const last = parseInt(localStorage.getItem(V34_YAHOO_LAST_ATTEMPT) || '0');
+  if(failUntil && now < failUntil) return false;
+  if(last && now - last < V34_YAHOO_OK_GAP) return false;
+  return true;
+}
+
+function v34YahooBase(symbol){
+  return `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=1d&interval=5m&includePrePost=true`;
+}
+
+function v34YahooProxyEndpoints(symbol){
+  const base = v34YahooBase(symbol);
+  const urls = [];
+  // Direct Yahoo remains opt-in only because direct browser Yahoo usually creates visible CORS errors.
+  if(localStorage.getItem('GOLD_ALLOW_DIRECT_YAHOO') === '1') urls.push(base);
+  urls.push('https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(base));
+  urls.push('https://api.allorigins.win/raw?url=' + encodeURIComponent(base));
+  urls.push('https://cors.isomorphic-git.org/' + base);
+  urls.push('https://corsproxy.io/?' + encodeURIComponent(base));
+  return urls;
+}
+
+async function v34FetchYahooPublicProxy(symbol){
+  const endpoints = v34YahooProxyEndpoints(symbol);
+  for(const url of endpoints){
+    const j = await v34FetchJson(url, 4300);
+    const parsed = v34ParseYahooAny(j, symbol === 'GC=F' ? 'Yahoo Futures Auto' : 'Yahoo XAU/USD Auto');
+    if(parsed && parsed.data.length >= 8) return parsed;
+  }
+  return null;
+}
+
+async function refreshRemoteHistoryInBackground(force=false){
+  if(S.remoteHistoryBusy || !S.gold) return;
+  if(!v34YahooCanAttempt(force)) return;
+  S.remoteHistoryBusy = true;
+  localStorage.setItem(V34_YAHOO_LAST_ATTEMPT, String(Date.now()));
+  try{
+    let set = await v34FetchYahooPublicProxy('GC=F');
+    if(!set) set = await v34FetchYahooPublicProxy('XAUUSD=X');
+    if(set && set.data && set.data.length >= 8){
+      v34ApplyYahooSet(set, set.source || 'Yahoo Auto');
+      localStorage.removeItem(V34_YAHOO_FAIL_UNTIL);
+      v34SaveFirebaseYahooMirror(S.history, S.chartSource);
+      if(S.initialized) renderAll();
+      return;
+    }
+    localStorage.setItem(V34_YAHOO_FAIL_UNTIL, String(Date.now() + V34_YAHOO_FAIL_GAP));
+  }catch(_){
+    localStorage.setItem(V34_YAHOO_FAIL_UNTIL, String(Date.now() + V34_YAHOO_FAIL_GAP));
+  }finally{
+    S.remoteHistoryBusy = false;
+  }
+}
+
+async function updateHistory(){
+  const cutoff = Date.now() - CHART_HOURS * 60 * 60 * 1000;
+
+  // 1) Preferred: same-origin Yahoo file from GitHub Action, or Firebase Yahoo mirror.
+  const yahooSet = await v34LoadBestYahooSet();
+  if(yahooSet && v34ApplyYahooSet(yahooSet, yahooSet.source)){
+    // Refresh public proxy in the background only occasionally; if it succeeds it will update Firebase mirror.
+    setTimeout(() => refreshRemoteHistoryInBackground(false), 1200);
+    return;
+  }
+
+  // 2) Safe fallback: local chart cache / Firebase price points / local history.
+  const local = getLocalHistory();
+  const cached = getChartCache();
+  if(cached && cached.data && cached.data.length >= 2){
+    S.history = mergeHistoryPoints([...cached.data, ...local]).filter(x => x.t >= cutoff);
+    S.chartSource = cached.source.includes('محفوظة') ? cached.source : `${cached.source} محفوظة`;
+    S.historyQuality = S.history.length >= 8 ? 'cached_market' : 'limited';
+  }else if(local.length >= 2){
+    S.history = local.filter(x => x.t >= cutoff);
+    S.chartSource = local.length >= 8 ? 'بيانات محلية' : 'بناء الرسم';
+    S.historyQuality = local.length >= 8 ? 'local' : 'limited';
+  }else if(S.gold){
+    S.history = [{t:Date.now(), p:S.gold, local:true, live:true}];
+    S.chartSource = 'بناء الرسم';
+    S.historyQuality = 'insufficient';
+  }else{
+    S.history = [];
+    S.chartSource = '—';
+    S.historyQuality = 'none';
+  }
+
+  // 3) Background Yahoo attempt. Never blocks the UI.
+  setTimeout(() => refreshRemoteHistoryInBackground(false), 1000);
+}
+
 
 
 fetchPrices();
