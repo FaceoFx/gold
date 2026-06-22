@@ -335,7 +335,7 @@ button:focus-visible,.csel:focus-visible,.calc-input:focus-visible,.ref-card:foc
 .chart-canvas-wrap{height:124px!important;margin-top:8px!important;position:relative!important}
 #goldChart{height:124px!important;width:100%!important;display:block!important;cursor:crosshair!important;touch-action:none!important}
 .chart-box{min-height:235px!important;border-radius:24px!important}
-.chart-source-chip{border-color:rgba(255,215,122,.28)!important;color:#ffe08a!important;background:rgba(255,215,122,.08)!important}
+.chart-source-chip{border-color:rgba(255,215,122,.28)!important;color:#ffe08a!important;background:rgba(255,215,122,.08)!important;max-width:170px;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}
 .chart-micro-row{align-items:center!important}.chart-micro-row span{white-space:nowrap!important}
 @media(max-width:370px){.chart-canvas-wrap,#goldChart{height:116px!important}.chart-box{min-height:225px!important}}
 
@@ -1753,7 +1753,7 @@ async function loadFirebaseHistory() {
 }
 
 // Save to Firebase every hour
-var lastFirebaseSave = (typeof lastFirebaseSave !== 'undefined' ? lastFirebaseSave : 0);
+let lastFirebaseSave = 0;
 function checkFirebaseSave(){
   const now = Date.now();
   if(firebaseEnabled && S.gold && (now - lastFirebaseSave) > 3600000){ // 1 hour
@@ -1965,7 +1965,7 @@ async function updateHistory(){
   const cached = getChartCache();
   if(cached){
     S.history = mergeHistoryPoints([...cached.data, ...local]).filter(x => x.t >= cutoff);
-    S.chartSource = cached.source.includes('محفوظة') ? cached.source : `${cached.source} محفوظة`;
+    S.chartSource = sourceWithSavedOnce(cached.source);
     S.historyQuality = 'cached_market';
   }else if(local.length >= 2){
     S.history = local.filter(x => x.t >= cutoff);
@@ -2174,9 +2174,38 @@ function renderForecastCard(pred){
   </div>`;
 }
 
+
+function cleanChartSourceLabel(src){
+  let s = String(src || '—')
+    .replace(/(?:محفوظة|cached|cache|Auto|مخزنة|مخزن)/ig, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if(!s || s === 'undefined' || s === 'null') return '—';
+
+  // Always return one short canonical label. Never append words here.
+  if(/Yahoo\s*GitHub|GitHub\s*Yahoo|GitHub/i.test(s)) return 'Yahoo GitHub';
+  if(/Yahoo\s*Shared|Yahoo\s*Mirror|Mirror/i.test(s)) return 'Yahoo Mirror';
+  if(/Yahoo\s*Futures|GC=F|Futures/i.test(s)) return 'Yahoo Futures';
+  if(/Yahoo\s*XAU|XAU\/USD|XAUUSD/i.test(s)) return 'Yahoo XAU/USD';
+  if(/Firebase/i.test(s)) return 'Firebase سريع';
+  if(/بناء|insufficient|جاري/i.test(s)) return 'بناء الرسم';
+  if(/محلية|local/i.test(s)) return 'بيانات محلية';
+  if(/سوق|market/i.test(s)) return 'بيانات سوق';
+  return s.replace(/\s+/g, ' ').trim();
+}
+
+function sourceWithSavedOnce(src){
+  const clean = cleanChartSourceLabel(src);
+  if(clean === '—' || /بناء الرسم|بيانات محلية/.test(clean)) return clean;
+  if(/^Yahoo/.test(clean)) return clean + ' محفوظة';
+  if(/^Firebase/.test(clean)) return 'Firebase محفوظة';
+  if(/^بيانات سوق/.test(clean)) return 'بيانات سوق محفوظة';
+  return clean;
+}
+
 function getChartStats(cur){
   const h = (S.history || []).filter(x => x && x.p > 100);
-  if(!h.length) return {high:'—', low:'—', source:S.chartSource || '—', changeLabel:'—'};
+  if(!h.length) return {high:'—', low:'—', source:cleanChartSourceLabel(S.chartSource || '—'), changeLabel:'—'};
   const prices = h.map(x => x.p);
   const hi = Math.max(...prices), lo = Math.min(...prices);
   const first = prices[0], last = prices[prices.length-1];
@@ -2184,7 +2213,7 @@ function getChartStats(cur){
   return {
     high:hi.toLocaleString('en-US',{maximumFractionDigits:0}),
     low:lo.toLocaleString('en-US',{maximumFractionDigits:0}),
-    source:S.chartSource || '—',
+    source:cleanChartSourceLabel(S.chartSource || '—'),
     changeLabel:(diff >= 0 ? '+' : '') + diff.toFixed(2) + '% خلال الرسم'
   };
 }
@@ -2524,7 +2553,7 @@ const V33_YAHOO_OK_GAP = 10 * 60 * 1000;
 const V33_YAHOO_FAIL_GAP = 18 * 60 * 1000;
 S.chartHover = null;
 S.chartEventsBound = false;
-console.log('✅ v33 auto Yahoo assist active: no manual proxy setup, throttled Yahoo public proxy fallback, no spam.');
+console.log('ℹ️ v33 legacy cache reader loaded; live Yahoo proxy attempts are disabled by v36.');
 
 async function tryFetch(url, ms, asText=false){
   try{
@@ -2623,7 +2652,7 @@ function savePriceToFirebase(price){
   pricesRef.child(dateKey).child(key).set({ price, timestamp:Date.now(), date:now.toISOString() }).catch(()=>{});
 }
 
-var lastFirebaseSave = (typeof lastFirebaseSave !== 'undefined' ? lastFirebaseSave : 0);
+lastFirebaseSave = lastFirebaseSave || 0;
 function checkFirebaseSave(){
   const now = Date.now();
   if(firebaseEnabled && S.gold && (now - lastFirebaseSave) > 5 * 60 * 1000){
@@ -2707,7 +2736,7 @@ function getV33YahooCache(){
     const cutoff = Date.now() - CHART_HOURS * 60 * 60 * 1000;
     const data = c.data.filter(x => x && x.t >= cutoff && x.p > 100).sort((a,b)=>a.t-b.t).map(x => ({...x, cached:true, real:true, yahoo:true}));
     if(data.length < 8) return null;
-    return {data, source:(c.source || 'Yahoo Auto') + ' محفوظة'};
+    return {data, source:sourceWithSavedOnce(c.source || 'Yahoo Auto')};
   }catch(_){ return null; }
 }
 
@@ -2722,7 +2751,7 @@ async function updateHistory(){
     S.historyQuality = 'cached_market';
   }else if(cached){
     S.history = mergeHistoryPoints([...cached.data, ...local]).filter(x => x.t >= cutoff);
-    S.chartSource = cached.source.includes('محفوظة') ? cached.source : `${cached.source} محفوظة`;
+    S.chartSource = sourceWithSavedOnce(cached.source);
     S.historyQuality = 'cached_market';
   }else if(local.length >= 2){
     S.history = local.filter(x => x.t >= cutoff);
@@ -2911,7 +2940,7 @@ const V34_YAHOO_FAIL_UNTIL = '_goldYahooPublicProxyFailUntilV34';
 const V34_YAHOO_OK_GAP = 6 * 60 * 1000;
 const V34_YAHOO_FAIL_GAP = 12 * 60 * 1000;
 const V34_REPO_MAX_AGE = 18 * 60 * 60 * 1000;
-console.log('✅ v34 Yahoo GitHub mirror active: same-origin Yahoo candles first, Firebase mirror second, browser Yahoo only as rare background fallback.');
+console.log('ℹ️ v34 GitHub Yahoo mirror reader loaded; external proxy attempts are disabled by v36.');
 
 function v34Number(x){
   const n = Number(x);
@@ -3038,7 +3067,7 @@ async function v34SaveFirebaseYahooMirror(data, source){
 
 function v34SaveYahooCache(data, source){
   try{
-    localStorage.setItem(V34_YAHOO_CACHE, JSON.stringify({ts:Date.now(), source:source || 'Yahoo', candles:data.slice(-260).map(x=>({t:x.t,p:x.p}))}));
+    localStorage.setItem(V34_YAHOO_CACHE, JSON.stringify({ts:Date.now(), source:cleanChartSourceLabel(source || 'Yahoo'), candles:data.slice(-260).map(x=>({t:x.t,p:x.p}))}));
   }catch(_){ }
 }
 
@@ -3047,15 +3076,16 @@ function v34GetYahooCache(){
     const c = JSON.parse(localStorage.getItem(V34_YAHOO_CACHE) || 'null');
     if(!c || !Array.isArray(c.candles)) return null;
     if(Date.now() - (c.ts || 0) > 8 * 60 * 60 * 1000) return null;
-    const parsed = v34ParseYahooAny({candles:c.candles, source:(c.source || 'Yahoo') + ' محفوظة', updatedAt:c.ts}, c.source || 'Yahoo');
-    return parsed ? {...parsed, source:(c.source || 'Yahoo') + ' محفوظة'} : null;
+    const baseSource = cleanChartSourceLabel(c.source || 'Yahoo');
+    const parsed = v34ParseYahooAny({candles:c.candles, source:sourceWithSavedOnce(baseSource), updatedAt:c.ts}, baseSource);
+    return parsed ? {...parsed, source:sourceWithSavedOnce(baseSource)} : null;
   }catch(_){ return null; }
 }
 
 function v34ApplyYahooSet(set, source){
   if(!set || !Array.isArray(set.data) || set.data.length < 8) return false;
   S.history = set.data;
-  S.chartSource = source || set.source || 'Yahoo';
+  S.chartSource = cleanChartSourceLabel(source || set.source || 'Yahoo');
   S.historyQuality = 'market';
   saveChartCache(S.history, S.chartSource);
   v34SaveYahooCache(S.history, S.chartSource);
@@ -3149,7 +3179,7 @@ async function updateHistory(){
   const cached = getChartCache();
   if(cached && cached.data && cached.data.length >= 2){
     S.history = mergeHistoryPoints([...cached.data, ...local]).filter(x => x.t >= cutoff);
-    S.chartSource = cached.source.includes('محفوظة') ? cached.source : `${cached.source} محفوظة`;
+    S.chartSource = sourceWithSavedOnce(cached.source);
     S.historyQuality = S.history.length >= 8 ? 'cached_market' : 'limited';
   }else if(local.length >= 2){
     S.history = local.filter(x => x.t >= cutoff);
@@ -3170,6 +3200,104 @@ async function updateHistory(){
 }
 
 
+
+/* === v35 SOURCE LABEL + AUTO ACTION POLISH ===
+   Keeps Yahoo/Firebase source labels short and fixes old localStorage values like:
+   "Yahoo Futures Auto محفوظة محفوظة محفوظة".
+*/
+(function v35CleanOldSourceCaches(){
+  const keys = ['_goldChartCacheV14','_goldYahooAutoCacheV33','_goldYahooMirrorCacheV34'];
+  for(const key of keys){
+    try{
+      const raw = localStorage.getItem(key);
+      if(!raw) continue;
+      const obj = JSON.parse(raw);
+      if(obj && obj.source) {
+        obj.source = cleanChartSourceLabel(obj.source);
+        localStorage.setItem(key, JSON.stringify(obj));
+      }
+    }catch(_){ }
+  }
+})();
+console.log('✅ v35 source polish active: clean Yahoo/Firebase labels + GitHub Action auto-run workflow support.');
+
+
+
+/* === v36 CLEAN STABLE YAHOO MODE ===
+   Fixes:
+   1) repeated source labels like "محفوظة محفوظة".
+   2) old public proxy / browser Yahoo attempts that caused CORS console spam.
+   3) Firebase permission_denied from writing yahooGoldMirror/latest.
+   Yahoo is now loaded only from same-origin data/yahoo-gold.json or an existing local Yahoo cache.
+*/
+(function v36CleanSourceCaches(){
+  const keys = ['_goldChartCacheV14','_goldYahooAutoCacheV33','_goldYahooMirrorCacheV34'];
+  for(const key of keys){
+    try{
+      const raw = localStorage.getItem(key);
+      if(!raw) continue;
+      const obj = JSON.parse(raw);
+      if(obj && obj.source){ obj.source = cleanChartSourceLabel(obj.source); }
+      if(obj && Array.isArray(obj.data)){ obj.data = obj.data.filter(x => x && x.t && x.p > 100).slice(-360); }
+      if(obj && Array.isArray(obj.candles)){ obj.candles = obj.candles.filter(x => x && x.t && x.p > 100).slice(-360); }
+      localStorage.setItem(key, JSON.stringify(obj));
+    }catch(_){ }
+  }
+})();
+
+// Stop legacy browser Yahoo/proxy attempts completely. Same-origin GitHub JSON remains enabled.
+v33YahooEndpoints = function(){ return []; };
+v33YahooCanAttempt = function(){ return false; };
+fetchYahooChartFast = async function(){ return []; };
+v34YahooProxyEndpoints = function(){ return []; };
+v34YahooCanAttempt = function(){ return false; };
+v34FetchYahooPublicProxy = async function(){ return null; };
+refreshRemoteHistoryInBackground = async function(){ return null; };
+v34SaveFirebaseYahooMirror = async function(){ return null; };
+
+// Prefer the GitHub Pages JSON first. Use old Yahoo local cache only as a local fallback.
+v34LoadBestYahooSet = async function(){
+  const repo = await v34FetchRepoYahoo();
+  if(repo && repo.data && repo.data.length >= 8) return {...repo, source:cleanChartSourceLabel(repo.source || 'Yahoo GitHub')};
+
+  const cached = v34GetYahooCache() || (typeof getV33YahooCache === 'function' ? getV33YahooCache() : null);
+  if(cached && cached.data && cached.data.length >= 8){
+    return {...cached, source:sourceWithSavedOnce(cached.source || 'Yahoo Futures')};
+  }
+
+  const fb = await v34FetchFirebaseYahooMirror();
+  if(fb && fb.data && fb.data.length >= 8) return {...fb, source:'Yahoo Mirror'};
+  return null;
+};
+
+// Make updateHistory deterministic and quiet. No background proxy calls.
+updateHistory = async function(){
+  const cutoff = Date.now() - CHART_HOURS * 60 * 60 * 1000;
+  const yahooSet = await v34LoadBestYahooSet();
+  if(yahooSet && v34ApplyYahooSet(yahooSet, yahooSet.source)){ return; }
+
+  const local = getLocalHistory();
+  const cached = getChartCache();
+  if(cached && cached.data && cached.data.length >= 2){
+    S.history = mergeHistoryPoints([...cached.data, ...local]).filter(x => x.t >= cutoff);
+    S.chartSource = sourceWithSavedOnce(cached.source);
+    S.historyQuality = S.history.length >= 8 ? 'cached_market' : 'limited';
+  }else if(local.length >= 2){
+    S.history = local.filter(x => x.t >= cutoff);
+    S.chartSource = local.length >= 8 ? 'بيانات محلية' : 'بناء الرسم';
+    S.historyQuality = local.length >= 8 ? 'local' : 'limited';
+  }else if(S.gold){
+    S.history = [{t:Date.now(), p:S.gold, local:true, live:true}];
+    S.chartSource = 'بناء الرسم';
+    S.historyQuality = 'insufficient';
+  }else{
+    S.history = [];
+    S.chartSource = '—';
+    S.historyQuality = 'none';
+  }
+};
+
+console.log('✅ v36 stable Yahoo mode active: label spam fixed, external Yahoo/proxy requests disabled, GitHub JSON/local cache only.');
 
 fetchPrices();
 
